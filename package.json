@@ -17,6 +17,8 @@
     "eslint-config-next": "13.5.2",
     "next": "13.5.2",
     "postcss": "8.4.30",
+    "primeicons": "^6.0.1",
+    "primereact": "^10.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.3"
@@ -63,20 +65,27 @@
       "@typescript-eslint"
     ],
     "rules": {
-      "prettier/prettier": ["error", {
-        "printWidth": 80,
-        "tabWidth": 2,
-        "singleQuote": false,
-        "trailingComma": "all",
-        "arrowParens": "always",
-        "semi": false,
-        "endOfLine": "auto"
-      }],
+      "prettier/prettier": [
+        "error",
+        {
+          "printWidth": 80,
+          "tabWidth": 2,
+          "singleQuote": false,
+          "trailingComma": "all",
+          "arrowParens": "always",
+          "semi": false,
+          "endOfLine": "auto"
+        }
+      ],
       "jsx-a11y/alt-text": [
         "warn",
         {
-          "elements": ["img"],
-          "img": ["Image"]
+          "elements": [
+            "img"
+          ],
+          "img": [
+            "Image"
+          ]
         }
       ],
       "jsx-a11y/aria-props": "warn",
