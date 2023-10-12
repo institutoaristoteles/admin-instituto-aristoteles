@@ -1,12 +1,41 @@
 import "./globals.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import { PropsWithChildren } from "react"
-import "primereact/resources/themes/soho-dark/theme.css"
+import "primereact/resources/themes/lara-light-indigo/theme.css"
 import "primeicons/primeicons.css"
 import { PrimeReactProvider } from "primereact/api"
+import localFont from "next/font/local"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = localFont({
+  variable: "--font-inter",
+  src: [
+    {
+      path: "./_shared/fonts/inter/Inter-Regular.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./_shared/fonts/inter/Inter-Bold.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./_shared/fonts/inter/Inter-Medium.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./_shared/fonts/inter/Inter-ExtraBold.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./_shared/fonts/inter/Inter-Black.ttf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+})
 
 export const metadata: Metadata = {
   title: {
