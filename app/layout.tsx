@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { PropsWithChildren } from 'react'
-import 'primereact/resources/themes/md-light-indigo/theme.css'
+import 'primereact/resources/themes/lara-dark-indigo/theme.css'
 import 'primeicons/primeicons.css'
 import { PrimeReactProvider } from 'primereact/api'
 import { inter } from '@/shared/fonts'
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: 'Painel administrativo do site Instituto Aristóteles',
 }
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="pt-br">
       <body className={inter.className}>

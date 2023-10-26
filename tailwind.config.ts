@@ -10,6 +10,11 @@ const config: Config = {
       center: true,
       padding: '2rem',
     },
+    colors: {
+      primary: 'var(--primary-color)',
+      'surface-card': 'var(--surface-card)',
+      'surface-border': 'var(--surface-border)',
+    },
     extend: {
       fontFamily: {
         sans: 'var(--font-inter)',
