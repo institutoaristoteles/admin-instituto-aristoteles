@@ -1,21 +1,33 @@
-import { Button } from 'primereact/button'
-import { InputText } from 'primereact/inputtext'
-import { Password } from 'primereact/password'
+import Image from 'next/image'
+
+import logoSvg from '@/shared/images/logo.svg'
+import LoginForm from '@/app/login/login-form'
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col gap-2 justify-start items-start">
-      <h1>Login</h1>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="nome">Nome</label>
-        <InputText type="text" id="nome" />
-      </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="password">Senha</label>
-        <Password type="password" id="password" />
-      </div>
+    <main>
+      <div className="container flex items-center justify-center h-screen max-w-lg">
+        <div className="w-full bg-surface-card rounded-2xl p-10 shadow flex flex-col gap-10">
+          <header className="flex flex-col gap-5 items-center">
+            <Image
+              src={logoSvg}
+              alt="Logo Instituto Aristóteles"
+              className="max-h-40"
+            />
 
-      <Button label="Enviar" />
-    </div>
+            <div>
+              <span className="opacity-75 uppercase block text-center text-sm mb-2">
+                Instituto Aristóteles
+              </span>
+              <h1 className="text-2xl text-primary text-center font-bold">
+                Administração
+              </h1>
+            </div>
+          </header>
+
+          <LoginForm />
+        </div>
+      </div>
+    </main>
   )
 }
