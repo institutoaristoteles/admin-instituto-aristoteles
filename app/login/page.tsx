@@ -6,13 +6,13 @@ import LoginForm from '@/app/login/login-form'
 export default function LoginPage() {
   return (
     <main>
-      <div className="container flex items-center justify-center h-screen max-w-lg">
-        <div className="w-full bg-surface-card rounded-2xl p-10 shadow flex flex-col gap-10">
+      <div className="md:container flex items-center justify-center h-screen md:max-w-lg">
+        <div className="w-full bg-surface-card md:rounded-2xl p-5 h-full md:h-auto md:p-10 shadow flex flex-col justify-center gap-10">
           <header className="flex flex-col gap-5 items-center">
             <Image
               src={logoSvg}
               alt="Logo Instituto Aristóteles"
-              className="max-h-40"
+              className="max-h-24"
             />
 
             <div>

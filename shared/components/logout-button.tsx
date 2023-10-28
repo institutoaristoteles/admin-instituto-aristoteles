@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
 import { logout } from '@/shared/services/auth.service'
@@ -10,12 +10,12 @@ export default function LogoutButton() {
   const router = useRouter()
   const [pending, setPending] = useState(false)
 
-  const handleClick = useCallback(async () => {
+  const handleClick = async () => {
     setPending(true)
     logout()
     setPending(false)
     router.push('/')
-  }, [router])
+  }
 
   return (
     <Button

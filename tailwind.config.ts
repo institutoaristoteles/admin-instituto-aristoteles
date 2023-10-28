@@ -8,7 +8,7 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: '1rem',
     },
     colors: {
       primary: 'var(--primary-color)',
