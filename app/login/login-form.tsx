@@ -2,20 +2,54 @@
 
 import { InputText } from 'primereact/inputtext'
 import { Password } from 'primereact/password'
-import { useFormState } from 'react-dom'
 import { Message } from 'primereact/message'
-import React from 'react'
-import { loginAction } from '@/shared/actions/auth'
+import React, { FormEvent, useState } from 'react'
 import SubmitButton from '@/shared/components/login-button'
 import { Button } from 'primereact/button'
+import { login } from '@/shared/services/auth.service'
+import { isAxiosError } from 'axios'
+import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
-  const [state, action] = useFormState(loginAction, { message: null })
+  const [pending, setIsPending] = useState(false)
+  const [error, setError] = useState<{ message: string | null }>({
+    message: null,
+  })
+  const router = useRouter()
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsPending(true)
+
+    const formData = new FormData(event.target as HTMLFormElement)
+
+    const data = Object.fromEntries(formData) as {
+      email: string
+      password: string
+    }
+
+    try {
+      await login(data.email, data.password)
+      router.push('/')
+    } catch (e) {
+      const errorMessage =
+        isAxiosError(e) && e.response?.status === 401
+          ? 'Usuário ou senha inválidos'
+          : 'Ocorreu um erro'
+
+      setError({ message: errorMessage })
+    } finally {
+      setIsPending(false)
+    }
+  }
 
   return (
-    <form className="flex flex-col items-center gap-5 w-full" action={action}>
-      {state.message && (
-        <Message severity="error" text={state.message} className="w-full" />
+    <form
+      className="flex flex-col items-center gap-5 w-full"
+      onSubmit={handleSubmit}
+    >
+      {error.message && (
+        <Message severity="error" text={error.message} className="w-full" />
       )}
 
       <label className="text-sm font-bold flex flex-col gap-1 w-full">
@@ -35,7 +69,7 @@ export default function LoginForm() {
         />
       </label>
 
-      <SubmitButton />
+      <SubmitButton pending={pending} />
 
       <Button text label="Esqueci minha senha" type="button" size="small" />
     </form>

@@ -1,20 +1,29 @@
 'use client'
 
-import React, { useTransition } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button } from 'primereact/button'
-import { logoutAction } from '@/shared/actions/auth'
 import { PrimeIcons } from 'primereact/api'
+import { logout } from '@/shared/services/auth.service'
+import { useRouter } from 'next/navigation'
 
 export default function LogoutButton() {
-  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
+  const [pending, setPending] = useState(false)
+
+  const handleClick = useCallback(async () => {
+    setPending(true)
+    logout()
+    setPending(false)
+    router.push('/')
+  }, [router])
 
   return (
     <Button
       label="Sair"
-      onClick={() => startTransition(logoutAction)}
+      onClick={handleClick}
       icon={PrimeIcons.SIGN_OUT}
       severity="danger"
-      loading={isPending}
+      loading={pending}
       text
     />
   )
