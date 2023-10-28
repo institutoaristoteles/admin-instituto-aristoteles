@@ -1,23 +1,25 @@
-import { cookies } from 'next/headers'
+import { deleteCookie, getCookie, setCookie } from 'cookies-next'
 
 export const ACCESS_TOKEN_COOKIE = 'accessToken'
 export const REFRESH_TOKEN_COOKIE = 'refreshToken'
 
-export async function saveToken(access: string, refresh: string) {
-  const cookiesStore = cookies()
-  cookiesStore.set(ACCESS_TOKEN_COOKIE, access)
-  cookiesStore.set(REFRESH_TOKEN_COOKIE, refresh)
+export function saveToken(access: string, refresh: string) {
+  setCookie(ACCESS_TOKEN_COOKIE, access)
+  setCookie(REFRESH_TOKEN_COOKIE, refresh)
 }
 
 export function clearToken() {
-  const cookiesStore = cookies()
-  cookiesStore.delete(ACCESS_TOKEN_COOKIE)
-  cookiesStore.delete(REFRESH_TOKEN_COOKIE)
+  deleteCookie(ACCESS_TOKEN_COOKIE)
+  deleteCookie(REFRESH_TOKEN_COOKIE)
 }
 
-export const getTokens = () => {
-  return {
-    accessToken: cookies().get(ACCESS_TOKEN_COOKIE)?.value,
-    refreshToken: cookies().get(REFRESH_TOKEN_COOKIE)?.value,
+export async function getToken(name: string) {
+  const isServer = typeof window === 'undefined'
+
+  if (isServer) {
+    const { cookies } = await import('next/headers')
+    return cookies().get(name)?.value
+  } else {
+    return getCookie(name)
   }
 }

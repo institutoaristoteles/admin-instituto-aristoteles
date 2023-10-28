@@ -17,11 +17,10 @@ export const login = cache(async (email: string, password: string) => {
   const body = { email, password } satisfies LoginData
   const { data } = await api.post<LoginResponse>('/auth/login', body)
 
-  await saveToken(data.access_token, data.refreshToken)
+  saveToken(data.access_token, data.refreshToken)
 })
 
-export const logout = async () => {
-  console.log('called')
+export const logout = () => {
   clearToken()
 }
 

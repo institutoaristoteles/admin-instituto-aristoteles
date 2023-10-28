@@ -1,13 +1,10 @@
 'use client'
 
-import { useFormStatus } from 'react-dom'
 import { Button } from 'primereact/button'
 import React from 'react'
 import { PrimeIcons } from 'primereact/api'
 
-export default function SubmitButton() {
-  const { pending } = useFormStatus()
-
+export default function SubmitButton({ pending }: { pending: boolean }) {
   return (
     <Button
       label="Entrar"
