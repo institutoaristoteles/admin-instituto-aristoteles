@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { Button } from 'primereact/button'
-import { PrimeIcons } from 'primereact/api'
 import { logout } from '@/shared/services/auth.service'
 import { useRouter } from 'next/navigation'
 
@@ -18,9 +17,10 @@ export default function LogoutButton() {
     <Button
       label="Sair"
       onClick={handleClick}
-      icon={PrimeIcons.SIGN_OUT}
       severity="danger"
-      text
+      className="p-0"
+      link
+      size="small"
     />
   )
 }

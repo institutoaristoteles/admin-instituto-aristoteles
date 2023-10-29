@@ -2,8 +2,16 @@ import Image from 'next/image'
 
 import logoSvg from '@/shared/images/logo.svg'
 import LoginForm from '@/app/login/login-form'
+import { getUser } from '@/shared/services/auth.service'
+import { redirect } from 'next/navigation'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const user = await getUser()
+
+  if (user) {
+    return redirect('/')
+  }
+
   return (
     <main>
       <div className="md:container flex items-center justify-center h-screen md:max-w-lg">
