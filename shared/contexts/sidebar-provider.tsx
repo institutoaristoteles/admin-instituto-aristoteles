@@ -25,7 +25,7 @@ export default function SidebarProvider({ children }: PropsWithChildren) {
 
   return (
     <SidebarContext.Provider value={{ open, setSidebarOpen: setOpen }}>
-      <div className="md:grid md:grid-cols-[auto_1fr] h-screen max-h-screen">
+      <div className="lg:grid lg:grid-cols-[auto_1fr] h-screen max-h-screen">
         <Sidebar />
 
         <div className="overflow-auto">{children}</div>
