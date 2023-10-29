@@ -16,9 +16,6 @@ body {
 }
 
 body {
-    /*display: grid;*/
-    /*grid-template-rows: auto 1fr auto;*/
-    /*gap: 2rem;*/
     background: var(--surface-ground);
     color: var(--text-color);
 }
@@ -29,4 +26,20 @@ body, .p-component {
 
 .p-button {
     @apply text-base;
+}
+
+.p-inline-message.p-inline-message-warn {
+    background: #ff8c0021;
+}
+
+.p-inline-message.p-inline-message-info {
+    background: #00008b21;
+}
+
+.p-inline-message.p-inline-message-success {
+    background: #00640024;
+}
+
+.p-inline-message.p-inline-message-error {
+    background: #8b00002b;
 }

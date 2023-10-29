@@ -1,11 +1,17 @@
 import { deleteCookie, getCookie, setCookie } from 'cookies-next'
+import { OptionsType } from 'cookies-next/lib/types'
 
 export const ACCESS_TOKEN_COOKIE = 'accessToken'
 export const REFRESH_TOKEN_COOKIE = 'refreshToken'
 
-export function saveToken(access: string, refresh: string) {
-  setCookie(ACCESS_TOKEN_COOKIE, access)
-  setCookie(REFRESH_TOKEN_COOKIE, refresh)
+export function saveToken(access: string, refresh: string, expiration: Date) {
+  const options: OptionsType = {
+    secure: true,
+    expires: expiration,
+  }
+
+  setCookie(ACCESS_TOKEN_COOKIE, access, options)
+  setCookie(REFRESH_TOKEN_COOKIE, refresh, options)
 }
 
 export function clearToken() {

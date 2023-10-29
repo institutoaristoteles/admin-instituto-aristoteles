@@ -4,20 +4,23 @@ import { clearToken, saveToken } from '@/shared/services/token.service'
 import { cache } from 'react'
 
 interface LoginData {
-  email: string
+  username: string
   password: string
 }
 
 interface LoginResponse {
-  access_token: string
+  accessToken: string
   refreshToken: string
+  expiresIn: string
 }
 
-export const login = cache(async (email: string, password: string) => {
-  const body = { email, password } satisfies LoginData
+export const login = cache(async (username: string, password: string) => {
+  const body = { username, password } satisfies LoginData
   const { data } = await api.post<LoginResponse>('/auth/login', body)
 
-  saveToken(data.access_token, data.refreshToken)
+  console.log(data)
+
+  saveToken(data.accessToken, data.refreshToken, new Date(data.expiresIn))
 })
 
 export const logout = () => {

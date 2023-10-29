@@ -24,21 +24,22 @@ export default function LoginForm() {
     const formData = new FormData(event.target as HTMLFormElement)
 
     const data = Object.fromEntries(formData) as {
-      email: string
+      username: string
       password: string
     }
 
     try {
-      await login(data.email, data.password)
+      await login(data.username, data.password)
       router.push('/')
     } catch (e) {
+      console.error(e)
+
       const errorMessage =
         isAxiosError(e) && e.response?.status === 401
           ? 'Usuário ou senha inválidos'
           : 'Ocorreu um erro'
 
       setError({ message: errorMessage })
-    } finally {
       setIsPending(false)
     }
   }
@@ -53,15 +54,14 @@ export default function LoginForm() {
       )}
 
       <label className="text-sm font-bold flex flex-col gap-1 w-full">
-        E-mail
-        <InputText type="email" id="email" name="email" required />
+        Usuário
+        <InputText type="text" name="username" required />
       </label>
 
       <label className="text-sm font-bold flex flex-col gap-1 w-full">
         Senha
         <Password
           type="password"
-          inputId="password"
           inputClassName="w-full"
           feedback={false}
           name="password"
