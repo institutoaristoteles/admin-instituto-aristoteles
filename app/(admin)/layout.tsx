@@ -3,6 +3,7 @@ import { getUser } from '@/shared/services/auth.service'
 import { redirect } from 'next/navigation'
 import SidebarProvider from '@/shared/contexts/sidebar-provider'
 import Header from '@/shared/components/header'
+import AuthProvider from '@/shared/contexts/auth-provider'
 
 export default async function AdminLayout({ children }: PropsWithChildren) {
   const user = await getUser()
@@ -13,9 +14,11 @@ export default async function AdminLayout({ children }: PropsWithChildren) {
 
   return (
     <SidebarProvider>
-      <Header />
+      <AuthProvider user={user}>
+        <Header />
 
-      {children}
+        {children}
+      </AuthProvider>
     </SidebarProvider>
   )
 }
