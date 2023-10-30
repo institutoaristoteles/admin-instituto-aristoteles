@@ -10,6 +10,7 @@ import { PrimeIcons } from 'primereact/api'
 export default function Sidebar() {
   const ref = useRef(null)
   const { open, setSidebarOpen } = useSidebar()
+  console.log('sidebar')
 
   useOnClickOutside(ref, () => setSidebarOpen(false))
 
