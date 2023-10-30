@@ -1,16 +1,14 @@
 import Image from 'next/image'
 import logoSvg from '@/shared/images/logo.svg'
-import SidebarMenuItem from '@/shared/components/sidebar-menu-item'
 import clsx from 'clsx'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useRef } from 'react'
 import { useSidebar } from '@/shared/contexts/sidebar-provider'
-import { PrimeIcons } from 'primereact/api'
+import SidebarMenu from '@/shared/components/sidebar-menu'
 
 export default function Sidebar() {
   const ref = useRef(null)
   const { open, setSidebarOpen } = useSidebar()
-  console.log('sidebar')
 
   useOnClickOutside(ref, () => setSidebarOpen(false))
 
@@ -42,33 +40,7 @@ export default function Sidebar() {
         </div>
       </header>
 
-      <nav className="w-full flex flex-col gap-1 px-3">
-        <SidebarMenuItem
-          label="Dashboard"
-          href="/"
-          icon={<i className={PrimeIcons.CHART_BAR} />}
-        />
-        <SidebarMenuItem
-          label="Artigos"
-          href="/artigos"
-          icon={<i className={PrimeIcons.BOOK} />}
-        />
-        <SidebarMenuItem
-          label="Categorias"
-          href="/categorias"
-          icon={<i className={PrimeIcons.TH_LARGE} />}
-        />
-        <SidebarMenuItem
-          label="Usuários"
-          href="/usuarios"
-          icon={<i className={PrimeIcons.USERS} />}
-        />
-        <SidebarMenuItem
-          label="Configurações"
-          href="/configuracoes"
-          icon={<i className={PrimeIcons.COG} />}
-        />
-      </nav>
+      <SidebarMenu />
     </aside>
   )
 }
