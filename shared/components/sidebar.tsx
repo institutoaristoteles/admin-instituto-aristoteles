@@ -17,10 +17,10 @@ export default function Sidebar() {
     <aside
       ref={ref}
       className={clsx(
-        'bg-surface-overlay flex flex-col items-center gap-10 border-r border-r-surface-border h-full lg:min-w-[300px] transition-all max-lg:fixed',
+        'bg-surface-overlay flex flex-col items-center gap-10 border-r border-r-surface-border h-full min-w-[250px] transition-all max-lg:fixed',
         {
           'max-lg:top-0 max-lg:-translate-x-full': !open,
-          'max-lg:w-[75%] max-lg:z-10': open,
+          'max-lg:max-w-[75%] max-lg:z-10': open,
         },
       )}
     >

@@ -12,7 +12,7 @@ export default async function Home() {
   return (
     <main>
       <div className="container">
-        <h2 className="text-5xl font-bold text-center text-primary py-5">
+        <h2 className="text-3xl font-bold text-primary py-5">
           Bem vindo, {user.name}!
         </h2>
       </div>
