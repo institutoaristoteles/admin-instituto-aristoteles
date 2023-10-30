@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import logoSvg from '@/shared/images/logo.svg'
-import MenuItem from '@/shared/components/menu-item'
+import SidebarMenuItem from '@/shared/components/sidebar-menu-item'
 import clsx from 'clsx'
 import { useOnClickOutside } from 'usehooks-ts'
 import { useRef } from 'react'
@@ -42,27 +42,27 @@ export default function Sidebar() {
       </header>
 
       <nav className="w-full flex flex-col gap-1 px-3">
-        <MenuItem
+        <SidebarMenuItem
           label="Dashboard"
           href="/"
           icon={<i className={PrimeIcons.CHART_BAR} />}
         />
-        <MenuItem
+        <SidebarMenuItem
           label="Artigos"
           href="/artigos"
           icon={<i className={PrimeIcons.BOOK} />}
         />
-        <MenuItem
+        <SidebarMenuItem
           label="Categorias"
           href="/categorias"
           icon={<i className={PrimeIcons.TH_LARGE} />}
         />
-        <MenuItem
+        <SidebarMenuItem
           label="Usuários"
           href="/usuarios"
           icon={<i className={PrimeIcons.USERS} />}
         />
-        <MenuItem
+        <SidebarMenuItem
           label="Configurações"
           href="/configuracoes"
           icon={<i className={PrimeIcons.COG} />}
