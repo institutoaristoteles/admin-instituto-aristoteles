@@ -21,6 +21,7 @@ export default async function LoginPage() {
               src={logoSvg}
               alt="Logo Instituto Aristóteles"
               className="max-h-24"
+              priority
             />
 
             <div>

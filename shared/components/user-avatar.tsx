@@ -1,15 +1,17 @@
-'use client'
-
 import { Avatar } from 'primereact/avatar'
-import { useAuth } from '@/shared/contexts/auth-provider'
 import LogoutButton from '@/shared/components/logout-button'
 import React from 'react'
+import { getUser } from '@/shared/services/auth.service'
 
-export default function UserAvatar() {
-  const { user } = useAuth()
+export default async function UserAvatar() {
+  const user = await getUser()
+
+  if (!user) {
+    return <></>
+  }
 
   return (
-    <div className="flex gap-2 ml-auto">
+    <div className="flex items-start gap-2 ml-auto">
       <Avatar image={user.avatar} label={user.name[0]} />
 
       <div className="flex flex-col items-start">
