@@ -8,7 +8,7 @@ export default function SidebarTrigger() {
 
   return (
     <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
-      <div className="bg-surface-b border border-surface-border rounded-2xl w-10 flex items-center justify-center aspect-square group-hover:bg-primary group-hover:text-primary-color-text">
+      <div className="bg-surface-card border border-surface-border rounded-2xl w-10 flex items-center justify-center aspect-square">
         <i className={PrimeIcons.BARS} />
       </div>
     </button>
