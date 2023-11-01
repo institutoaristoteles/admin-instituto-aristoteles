@@ -3,7 +3,13 @@
 import { createContext, PropsWithChildren, useContext } from 'react'
 import { UserProfile } from '@/shared/models/user-profile'
 
-const defaultUser = { id: '', email: '', avatar: '', name: '' }
+const defaultUser: UserProfile = {
+  id: '',
+  email: '',
+  avatar: '',
+  name: '',
+  username: '',
+}
 
 export const AuthContext = createContext<{ user: UserProfile }>({
   user: defaultUser,

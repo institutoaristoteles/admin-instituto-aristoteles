@@ -28,6 +28,7 @@ export default function Sidebar() {
           src={logoSvg}
           alt="Logo Instituto Aristóteles"
           className="max-h-16"
+          priority
         />
 
         <div>
