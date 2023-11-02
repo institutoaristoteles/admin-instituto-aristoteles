@@ -4,7 +4,7 @@ import { InputText } from 'primereact/inputtext'
 import { Password } from 'primereact/password'
 import { Message } from 'primereact/message'
 import React, { FormEvent, useState } from 'react'
-import SubmitButton from '@/shared/components/login-button'
+import LoginButton from '@/shared/components/login-button'
 import { Button } from 'primereact/button'
 import { login } from '@/shared/services/auth.service'
 import { isAxiosError } from 'axios'
@@ -69,7 +69,7 @@ export default function LoginForm() {
         />
       </label>
 
-      <SubmitButton pending={pending} />
+      <LoginButton pending={pending} />
 
       <Button text label="Esqueci minha senha" type="button" size="small" />
     </form>
