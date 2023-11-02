@@ -31,7 +31,7 @@ body, .p-component {
 }
 
 .p-button {
-    @apply text-base;
+    @apply text-sm;
 }
 
 .p-inline-message.p-inline-message-warn {
@@ -48,4 +48,13 @@ body, .p-component {
 
 .p-inline-message.p-inline-message-error {
     background: #8b00002b;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+    background: none;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    background: none;
+    @apply font-normal text-xs uppercase text-text-color-secondary;
 }
