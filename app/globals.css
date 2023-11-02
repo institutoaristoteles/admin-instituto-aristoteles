@@ -58,3 +58,9 @@ body, .p-component {
     background: none;
     @apply font-normal text-xs uppercase text-text-color-secondary;
 }
+
+.p-datatable .p-datatable-header {
+    background: none;
+    border: none;
+    @apply px-0;
+}

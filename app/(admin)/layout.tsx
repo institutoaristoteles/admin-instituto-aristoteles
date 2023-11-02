@@ -13,12 +13,12 @@ export default async function AdminLayout({ children }: PropsWithChildren) {
   }
 
   return (
-    <SidebarProvider>
-      <AuthProvider user={user}>
+    <AuthProvider user={user}>
+      <SidebarProvider>
         <Header />
 
         {children}
-      </AuthProvider>
-    </SidebarProvider>
+      </SidebarProvider>
+    </AuthProvider>
   )
 }
