@@ -3,10 +3,11 @@
 import { Category } from '@/shared/models/category'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
 import { getCategories } from '@/shared/services/categories.service'
+import Link from 'next/link'
 
 const dateFormatter = new Intl.DateTimeFormat('pt-br', {
   dateStyle: 'medium',
@@ -32,10 +33,18 @@ export default function CategoriesTable() {
     return () => setCategories([])
   }, [])
 
-  const tableHeader = useMemo(
-    () => (
-      <header className="flex items-center justify-between gap-5">
-        <div className="flex items-center gap-5 shrink-0">
+  return (
+    <React.Fragment>
+      <header className="flex items-center justify-between gap-5 pb-5">
+        <div className="flex items-center gap-2 shrink-0">
+          <Link href="/categorias/novo">
+            <Button
+              label="Nova categoria"
+              icon={PrimeIcons.PLUS}
+              size="small"
+            />
+          </Link>
+
           {selectedCategories.length > 0 && (
             <Button
               label="Excluir"
@@ -44,16 +53,9 @@ export default function CategoriesTable() {
               severity="danger"
             />
           )}
-
-          <Button label="Nova categoria" icon={PrimeIcons.PLUS} size="small" />
         </div>
       </header>
-    ),
-    [selectedCategories.length],
-  )
 
-  return (
-    <div>
       <DataTable
         value={categories}
         selection={selectedCategories}
@@ -61,7 +63,6 @@ export default function CategoriesTable() {
         onSelectionChange={(e) => setSelectedCategories(e.value)}
         loading={loadingCategories}
         dataKey="id"
-        header={tableHeader}
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
         <Column
@@ -98,6 +99,6 @@ export default function CategoriesTable() {
           )}
         />
       </DataTable>
-    </div>
+    </React.Fragment>
   )
 }
