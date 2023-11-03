@@ -152,7 +152,7 @@ export default function CategoriesTable() {
       <DataTable
         value={categories}
         selection={selectedCategories}
-        selectionMode="checkbox"
+        selectionMode="multiple"
         onSelectionChange={(e) => setSelectedCategories(e.value)}
         loading={loading}
         dataKey="id"
