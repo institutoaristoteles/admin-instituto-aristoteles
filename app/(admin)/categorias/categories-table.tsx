@@ -122,7 +122,7 @@ export default function CategoriesTable() {
         <div className="flex items-center gap-2 shrink-0">
           <Link href="/categorias/novo">
             <Button
-              label="Nova categoria"
+              label="Adicionar"
               icon={PrimeIcons.PLUS}
               size="small"
               severity="success"
