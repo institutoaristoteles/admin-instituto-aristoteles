@@ -14,10 +14,23 @@ import { z } from 'zod'
 import { Category } from '@/shared/models/category'
 import toast from 'react-hot-toast'
 import { PrimeIcons } from 'primereact/api'
+import { isAxiosError } from 'axios'
+import clsx from 'clsx'
 
 const createCategoryData = z.object({
   title: z.string(),
 })
+
+interface ApiException {
+  type: 'duplicated_key'
+  path: string
+  statusCode: number
+  timestamp: string
+}
+
+function isApiException(e: unknown): e is ApiException {
+  return isAxiosError(e) && !!e.response?.data.type
+}
 
 export default function CategoryForm({ category }: { category?: Category }) {
   const [pending, setPending] = useState(false)
@@ -27,6 +40,7 @@ export default function CategoryForm({ category }: { category?: Category }) {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     reset,
   } = useForm<SaveCategory>({
     resolver: zodResolver(createCategoryData),
@@ -41,12 +55,19 @@ export default function CategoryForm({ category }: { category?: Category }) {
         toast.success('Categoria criada com sucesso')
         router.push('/categorias')
       } catch (e) {
+        if (isApiException(e) && e.type === 'duplicated_key') {
+          setError('title', {
+            type: e.type,
+            message: 'Esta categoria já existe',
+          })
+        }
+
         toast.error('Ocorreu um erro ao salvar esta categoria')
       } finally {
         setPending(false)
       }
     },
-    [category?.id, router],
+    [category?.id, router, setError],
   )
 
   const onCancel = useCallback(() => {
@@ -61,7 +82,11 @@ export default function CategoryForm({ category }: { category?: Category }) {
     >
       <label className="text-sm font-bold flex flex-col gap-1 w-full">
         Nome
-        <InputText autoFocus {...register('title')} />
+        <InputText
+          autoFocus
+          {...register('title')}
+          className={clsx({ 'p-invalid': errors.title })}
+        />
         {errors.title && (
           <span className="text-[#ff7b7b] font-normal">
             {errors.title.message}

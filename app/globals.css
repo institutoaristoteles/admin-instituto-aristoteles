@@ -50,8 +50,12 @@ body, .p-component {
     background: #8b00002b;
 }
 
-.p-datatable .p-datatable-tbody > tr {
+.p-datatable .p-datatable-tbody > tr:not(tr.p-highlight) {
     background: none;
+}
+
+.p-datatable .p-datatable-tbody > tr.p-highlight {
+    @apply bg-surface-c;
 }
 
 .p-datatable .p-datatable-thead > tr > th {
