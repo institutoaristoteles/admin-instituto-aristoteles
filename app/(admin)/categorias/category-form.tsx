@@ -3,17 +3,21 @@
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
 import React, { useCallback, useState } from 'react'
-import { NewCategory, saveCategory } from '@/shared/services/categories.service'
+import {
+  SaveCategory,
+  saveCategory,
+} from '@/shared/services/categories.service'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { Category } from '@/shared/models/category'
 
 const createCategoryData = z.object({
   name: z.string(),
 })
 
-export default function CategoryForm() {
+export default function CategoryForm({ category }: { category?: Category }) {
   const [pending, setPending] = useState(false)
   const router = useRouter()
 
@@ -22,12 +26,13 @@ export default function CategoryForm() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<NewCategory>({
+  } = useForm<SaveCategory>({
     resolver: zodResolver(createCategoryData),
+    values: category ? { id: category.id, name: category.title } : undefined,
   })
 
   const onSubmit = useCallback(
-    async (data: NewCategory) => {
+    async (data: SaveCategory) => {
       try {
         setPending(true)
         await saveCategory(data)

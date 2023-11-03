@@ -1,9 +1,14 @@
-'use client'
-
 import React from 'react'
 import CategoryForm from '@/app/(admin)/categorias/category-form'
+import { getCategoryById } from '@/shared/services/categories.service'
 
-export default function NewCategoryPage() {
+export default async function EditCategoryPage({
+  params,
+}: {
+  params: { id: string }
+}) {
+  const category = await getCategoryById(params.id)
+
   return (
     <main>
       <div className="container">
@@ -13,7 +18,7 @@ export default function NewCategoryPage() {
           </h2>
         </header>
 
-        <CategoryForm />
+        <CategoryForm category={category} />
       </div>
     </main>
   )
