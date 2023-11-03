@@ -6,7 +6,6 @@ export default function Header() {
     <header>
       <div className="container py-5 flex items-center">
         <SidebarTrigger />
-
         <UserAvatar />
       </div>
     </header>
