@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog'
 import { dateFormatter } from '@/shared/utils/date'
 import toast from 'react-hot-toast'
+import { Badge } from 'primereact/badge'
 
 export default function CategoriesTable() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -124,6 +125,8 @@ export default function CategoriesTable() {
               label="Nova categoria"
               icon={PrimeIcons.PLUS}
               size="small"
+              severity="success"
+              outlined
             />
           </Link>
 
@@ -134,9 +137,14 @@ export default function CategoriesTable() {
               size="small"
               severity="danger"
               onClick={confirmCategoriesRemoval}
-              badge={selectedCategories.length.toString()}
               loading={loading}
-            />
+              outlined
+            >
+              <Badge
+                value={selectedCategories.length.toString()}
+                severity="danger"
+              />
+            </Button>
           )}
         </div>
       </header>
