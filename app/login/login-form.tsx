@@ -32,8 +32,6 @@ export default function LoginForm() {
       await login(data.username, data.password)
       router.push('/')
     } catch (e) {
-      console.error(e)
-
       const errorMessage =
         isAxiosError(e) && e.response?.status === 401
           ? 'Usuário ou senha inválidos'

@@ -6,6 +6,7 @@ import 'primeicons/primeicons.css'
 import { PrimeReactProvider } from 'primereact/api'
 import { inter } from '@/shared/fonts'
 import TailwindFix from '@/shared/utils/tailwind-fix'
+import ToastContainer from '@/shared/components/toast-container'
 
 export const metadata: Metadata = {
   title: {
@@ -19,7 +20,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <PrimeReactProvider>{children}</PrimeReactProvider>
+        <PrimeReactProvider>
+          <ToastContainer>{children}</ToastContainer>
+        </PrimeReactProvider>
         <TailwindFix />
       </body>
     </html>
