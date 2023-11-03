@@ -13,6 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Category } from '@/shared/models/category'
 import toast from 'react-hot-toast'
+import { PrimeIcons } from 'primereact/api'
 
 const createCategoryData = z.object({
   title: z.string(),
@@ -68,9 +69,23 @@ export default function CategoryForm({ category }: { category?: Category }) {
         )}
       </label>
 
-      <div className="flex items-center gap-2">
-        <Button label="Salvar" type="submit" loading={pending} />
-        <Button label="Cancelar" outlined type="button" onClick={onCancel} />
+      <div className="flex flex-col justify-end md:flex-row gap-2 w-full">
+        <Button
+          label="Salvar"
+          type="submit"
+          loading={pending}
+          className="w-full md:w-auto"
+          icon={PrimeIcons.SAVE}
+          severity="success"
+        />
+        <Button
+          label="Cancelar"
+          outlined
+          type="button"
+          onClick={onCancel}
+          className="w-full md:w-auto"
+          icon={PrimeIcons.CHEVRON_LEFT}
+        />
       </div>
     </form>
   )
