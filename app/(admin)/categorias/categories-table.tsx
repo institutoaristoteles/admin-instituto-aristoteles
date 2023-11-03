@@ -121,13 +121,7 @@ export default function CategoriesTable() {
       <header className="flex items-center justify-between gap-5 pb-5">
         <div className="flex items-center gap-2 shrink-0">
           <Link href="/categorias/novo">
-            <Button
-              label="Adicionar"
-              icon={PrimeIcons.PLUS}
-              size="small"
-              severity="success"
-              outlined
-            />
+            <Button label="Adicionar" icon={PrimeIcons.PLUS} size="small" />
           </Link>
 
           {selectedCategories.length > 0 && (
