@@ -3,8 +3,7 @@ import { Category } from '@/shared/models/category'
 import React from 'react'
 
 export interface SaveCategory {
-  id?: string
-  name: string
+  title: string
 }
 
 export const getCategories = React.cache(async () => {
@@ -17,12 +16,22 @@ export const getCategoryById = React.cache(async (id: string) => {
   return data
 })
 
-export const saveCategory = React.cache(async (data: SaveCategory) => {
-  const isUpdate = !!data.id
+export const saveCategory = React.cache(
+  async (data: SaveCategory, id?: string) => {
+    if (id) {
+      return await api.put(`/categories/${id}`, data)
+    }
 
-  if (isUpdate) {
-    return await api.put('/categories', data)
-  }
+    await api.post('/categories', data)
+  },
+)
 
-  await api.post('/categories', data)
+export const bulkDeleteCategories = React.cache(async (...ids: string[]) => {
+  await api.delete('/categories/bulk-delete', {
+    data: { ids },
+  })
+})
+
+export const deleteCategory = React.cache(async (id: string) => {
+  await api.delete(`/categories/${id}`)
 })

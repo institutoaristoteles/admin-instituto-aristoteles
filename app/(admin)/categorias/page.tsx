@@ -1,5 +1,10 @@
 import React from 'react'
 import CategoriesTable from '@/app/(admin)/categorias/categories-table'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Categorias',
+}
 
 export default async function CategoriesPage() {
   return (

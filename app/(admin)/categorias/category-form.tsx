@@ -12,9 +12,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Category } from '@/shared/models/category'
+import toast from 'react-hot-toast'
 
 const createCategoryData = z.object({
-  name: z.string(),
+  title: z.string(),
 })
 
 export default function CategoryForm({ category }: { category?: Category }) {
@@ -28,25 +29,26 @@ export default function CategoryForm({ category }: { category?: Category }) {
     reset,
   } = useForm<SaveCategory>({
     resolver: zodResolver(createCategoryData),
-    values: category ? { id: category.id, name: category.title } : undefined,
+    values: category ? { title: category.title } : undefined,
   })
 
   const onSubmit = useCallback(
     async (data: SaveCategory) => {
       try {
         setPending(true)
-        await saveCategory(data)
+        await saveCategory(data, category?.id)
+        toast.success('Categoria criada com sucesso')
         router.push('/categorias')
       } catch (e) {
-        console.error(e)
+        toast.error('Ocorreu um erro ao salvar esta categoria')
       } finally {
         setPending(false)
       }
     },
-    [router],
+    [category?.id, router],
   )
 
-  const cancel = useCallback(() => {
+  const onCancel = useCallback(() => {
     reset()
     router.push('/categorias')
   }, [reset, router])
@@ -58,17 +60,17 @@ export default function CategoryForm({ category }: { category?: Category }) {
     >
       <label className="text-sm font-bold flex flex-col gap-1 w-full">
         Nome
-        <InputText {...register('name')} />
-        {errors.name && (
+        <InputText autoFocus {...register('title')} />
+        {errors.title && (
           <span className="text-[#ff7b7b] font-normal">
-            {errors.name.message}
+            {errors.title.message}
           </span>
         )}
       </label>
 
       <div className="flex items-center gap-2">
         <Button label="Salvar" type="submit" loading={pending} />
-        <Button label="Cancelar" outlined type="button" onClick={cancel} />
+        <Button label="Cancelar" outlined type="button" onClick={onCancel} />
       </div>
     </form>
   )

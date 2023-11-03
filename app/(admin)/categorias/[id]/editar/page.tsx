@@ -1,6 +1,11 @@
 import React from 'react'
 import CategoryForm from '@/app/(admin)/categorias/category-form'
 import { getCategoryById } from '@/shared/services/categories.service'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Editar categoria',
+}
 
 export default async function EditCategoryPage({
   params,

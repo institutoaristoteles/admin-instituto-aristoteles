@@ -1,7 +1,10 @@
-'use client'
-
 import React from 'react'
 import CategoryForm from '@/app/(admin)/categorias/category-form'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Nova categoria',
+}
 
 export default function NewCategoryPage() {
   return (
