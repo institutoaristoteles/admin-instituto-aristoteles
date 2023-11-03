@@ -64,3 +64,9 @@ body, .p-component {
     border: none;
     @apply px-0;
 }
+
+.p-avatar-image img {
+    width: 2rem;
+    height: 2rem;
+    @apply rounded;
+}
