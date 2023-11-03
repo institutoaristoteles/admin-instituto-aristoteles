@@ -26,7 +26,7 @@ export const saveCategory = React.cache(
   },
 )
 
-export const bulkDeleteCategories = React.cache(async (...ids: string[]) => {
+export const deleteCategories = React.cache(async (...ids: string[]) => {
   await api.delete('/categories/bulk-delete', {
     data: { ids },
   })

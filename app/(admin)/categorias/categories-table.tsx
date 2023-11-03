@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
 import {
-  bulkDeleteCategories,
+  deleteCategories,
   deleteCategory,
   getCategories,
 } from '@/shared/services/categories.service'
@@ -33,13 +33,13 @@ export default function CategoriesTable() {
     }
   }, [])
 
-  const removeSelectedCategories = useCallback(async () => {
+  const removeAllSelected = useCallback(async () => {
     try {
       setLoading(true)
       const ids = selectedCategories.map((category) => category.id)
       if (ids.length <= 0) return
 
-      await bulkDeleteCategories(...ids)
+      await deleteCategories(...ids)
       await loadCategories()
       toast.success(
         `${selectedCategories.length} categoria(s) removidas com sucesso`,
@@ -58,6 +58,7 @@ export default function CategoriesTable() {
         setLoading(true)
         await deleteCategory(id)
         await loadCategories()
+        setSelectedCategories([])
         toast.success('Categoria removida com sucesso')
       } catch (e) {
         toast.error('Ocorreu um erro ao remover a categoria')
@@ -78,7 +79,7 @@ export default function CategoriesTable() {
         rejectLabel: 'Não, cancelar',
         acceptLabel: 'Sim, excluir',
         async accept() {
-          return await removeCategory(category.id)
+          await removeCategory(category.id)
         },
       })
     },
@@ -104,16 +105,19 @@ export default function CategoriesTable() {
       acceptClassName: 'p-button-danger',
       rejectLabel: 'Não, cancelar',
       acceptLabel: 'Sim, excluir',
-      accept: removeSelectedCategories,
+      accept: removeAllSelected,
     })
-  }, [removeSelectedCategories, selectedCategories])
+  }, [removeAllSelected, selectedCategories])
 
   useEffect(() => {
     ;(async () => {
       await loadCategories()
     })()
 
-    return () => setCategories([])
+    return () => {
+      setCategories([])
+      setSelectedCategories([])
+    }
   }, [loadCategories])
 
   return (
