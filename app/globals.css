@@ -70,3 +70,12 @@ body, .p-component {
     height: 2rem;
     @apply rounded;
 }
+
+.p-paginator {
+    background: none;
+    border: 0;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    @apply bg-surface-d text-text-color;
+}
