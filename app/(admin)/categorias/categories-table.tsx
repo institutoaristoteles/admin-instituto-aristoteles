@@ -91,9 +91,11 @@ export default function CategoriesTable() {
           )}
         />
         <Column
-          body={(_category: Category) => (
+          body={(category: Category) => (
             <div className="flex items-center gap-2">
-              <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
+              <Link href={`/categorias/${category.id}/editar`}>
+                <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
+              </Link>
               <Button icon={PrimeIcons.TRASH} text rounded severity="danger" />
             </div>
           )}
