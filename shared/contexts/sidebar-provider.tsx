@@ -28,7 +28,7 @@ export default function SidebarProvider({ children }: PropsWithChildren) {
       <div className="lg:grid lg:grid-cols-[auto_1fr] h-screen max-h-screen">
         <Sidebar />
 
-        <div className="overflow-auto">{children}</div>
+        <div className="overflow-auto pb-10">{children}</div>
       </div>
     </SidebarContext.Provider>
   )
