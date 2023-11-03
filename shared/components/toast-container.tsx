@@ -8,9 +8,10 @@ export default function ToastContainer({ children }: PropsWithChildren) {
       <Toaster
         position="top-center"
         toastOptions={{
+          duration: 100000,
           style: {
             borderRadius: '10px',
-            background: 'var(--surface-c)',
+            background: 'var(--surface-overlay)',
             color: 'var(--text-color)',
           },
         }}
