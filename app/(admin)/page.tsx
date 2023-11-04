@@ -1,5 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
+import PageHeader from '@/shared/components/page-header'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -9,7 +10,7 @@ export default async function Home() {
   return (
     <main>
       <div className="container">
-        <h2 className="text-3xl font-bold text-primary py-5">Dashboard</h2>
+        <PageHeader title="Dashboard" breadcrumbs={[{ label: 'Dashboard' }]} />
       </div>
     </main>
   )

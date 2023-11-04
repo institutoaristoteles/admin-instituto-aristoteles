@@ -1,3 +1,4 @@
 export const dateFormatter = new Intl.DateTimeFormat('pt-br', {
-  dateStyle: 'medium',
+  dateStyle: 'short',
+  timeStyle: 'short',
 })
