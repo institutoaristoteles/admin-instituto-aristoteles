@@ -8,11 +8,14 @@ import { Column } from 'primereact/column'
 import Link from 'next/link'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
+import { Badge } from 'primereact/badge'
+import { useCurrentUser } from '@/shared/contexts/auth-provider'
 
 export default function UsersTable() {
   const [loading, setLoading] = useState(false)
   const [users, setUsers] = useState<UserProfile[]>([])
   const [selected, setSelected] = useState<UserProfile[]>([])
+  const currentUser = useCurrentUser()
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
@@ -36,6 +39,27 @@ export default function UsersTable() {
 
   return (
     <React.Fragment>
+      <header className="flex items-center justify-between gap-5 pb-5">
+        <div className="flex items-center gap-2 shrink-0">
+          <Link href="/usuarios/novo">
+            <Button label="Adicionar" icon={PrimeIcons.PLUS} size="small" />
+          </Link>
+
+          {selected.length > 0 && (
+            <Button
+              label="Excluir"
+              icon={PrimeIcons.TRASH}
+              size="small"
+              severity="danger"
+              loading={loading}
+              outlined
+            >
+              <Badge value={selected.length.toString()} severity="danger" />
+            </Button>
+          )}
+        </div>
+      </header>
+
       <DataTable
         value={users}
         loading={loading}
@@ -62,7 +86,13 @@ export default function UsersTable() {
                 <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
               </Link>
 
-              <Button icon={PrimeIcons.TRASH} text rounded severity="danger" />
+              <Button
+                icon={PrimeIcons.TRASH}
+                text
+                rounded
+                severity="danger"
+                disabled={user.id === currentUser.id}
+              />
             </div>
           )}
         />
