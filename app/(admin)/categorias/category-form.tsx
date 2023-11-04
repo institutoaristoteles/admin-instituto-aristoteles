@@ -14,23 +14,12 @@ import { z } from 'zod'
 import { Category } from '@/shared/models/category'
 import toast from 'react-hot-toast'
 import { PrimeIcons } from 'primereact/api'
-import { isAxiosError } from 'axios'
 import clsx from 'clsx'
+import { isConflictError } from '@/shared/utils/errors'
 
 const createCategoryData = z.object({
   title: z.string(),
 })
-
-interface ApiException {
-  type: 'duplicated_key'
-  path: string
-  statusCode: number
-  timestamp: string
-}
-
-function isApiException(e: unknown): e is ApiException {
-  return isAxiosError(e) && !!e.response?.data.type
-}
 
 export default function CategoryForm({ category }: { category?: Category }) {
   const [pending, setPending] = useState(false)
@@ -47,6 +36,11 @@ export default function CategoryForm({ category }: { category?: Category }) {
     values: category ? { title: category.title } : undefined,
   })
 
+  const onCancel = useCallback(() => {
+    reset()
+    router.push('/categorias')
+  }, [reset, router])
+
   const onSubmit = useCallback(
     async (data: SaveCategory) => {
       try {
@@ -55,11 +49,8 @@ export default function CategoryForm({ category }: { category?: Category }) {
         toast.success('Categoria criada com sucesso')
         router.push('/categorias')
       } catch (e) {
-        if (isApiException(e) && e.type === 'duplicated_key') {
-          setError('title', {
-            type: e.type,
-            message: 'Esta categoria já existe',
-          })
+        if (isConflictError(e)) {
+          setError('title', { message: 'Esta categoria já existe' })
         }
 
         toast.error('Ocorreu um erro ao salvar esta categoria')
@@ -69,11 +60,6 @@ export default function CategoryForm({ category }: { category?: Category }) {
     },
     [category?.id, router, setError],
   )
-
-  const onCancel = useCallback(() => {
-    reset()
-    router.push('/categorias')
-  }, [reset, router])
 
   return (
     <form

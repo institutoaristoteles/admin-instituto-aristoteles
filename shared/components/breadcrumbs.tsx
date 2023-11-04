@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import clsx from 'clsx'
@@ -10,7 +10,7 @@ export interface BreadcrumbItem {
   path?: string
 }
 
-export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
+function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   const renderItem = useCallback((item: BreadcrumbItem) => {
     if (item.path) {
       return (
@@ -52,3 +52,5 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
     </div>
   )
 }
+
+export default memo(Breadcrumbs)

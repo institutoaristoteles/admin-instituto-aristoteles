@@ -1,12 +1,12 @@
-import { BreadcrumbItem, Breadcrumbs } from '@/shared/components/breadcrumbs'
-import React from 'react'
+import Breadcrumbs, { BreadcrumbItem } from '@/shared/components/breadcrumbs'
+import React, { memo } from 'react'
 
 interface PageHeaderProps {
   title: string
   breadcrumbs: BreadcrumbItem[]
 }
 
-export default function PageHeader(props: PageHeaderProps) {
+function PageHeader(props: PageHeaderProps) {
   return (
     <>
       <Breadcrumbs items={props.breadcrumbs} />
@@ -16,3 +16,5 @@ export default function PageHeader(props: PageHeaderProps) {
     </>
   )
 }
+
+export default memo(PageHeader)
