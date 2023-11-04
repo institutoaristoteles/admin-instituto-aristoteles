@@ -6,6 +6,7 @@ import {
   PropsWithChildren,
   SetStateAction,
   useContext,
+  useMemo,
   useState,
 } from 'react'
 import Sidebar from '@/shared/components/sidebar'
@@ -15,16 +16,15 @@ interface SidebarContextProps {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const SidebarContext = createContext<SidebarContextProps>({
-  open: false,
-  setSidebarOpen: () => {},
-})
+const SidebarContext = createContext<SidebarContextProps | null>(null)
 
 export default function SidebarProvider({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(false)
 
+  const value = useMemo(() => ({ open, setSidebarOpen: setOpen }), [open])
+
   return (
-    <SidebarContext.Provider value={{ open, setSidebarOpen: setOpen }}>
+    <SidebarContext.Provider value={value}>
       <div className="lg:grid lg:grid-cols-[auto_1fr] h-screen max-h-screen">
         <Sidebar />
 
@@ -35,5 +35,11 @@ export default function SidebarProvider({ children }: PropsWithChildren) {
 }
 
 export function useSidebar() {
-  return useContext(SidebarContext)
+  const value = useContext(SidebarContext)
+
+  if (value === null) {
+    throw new Error('useSidebar cannot be called without an SidebarProvider')
+  }
+
+  return value
 }

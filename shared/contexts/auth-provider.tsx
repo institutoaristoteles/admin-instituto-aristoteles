@@ -3,27 +3,21 @@
 import { createContext, PropsWithChildren, useContext } from 'react'
 import { UserProfile } from '@/shared/models/user-profile'
 
-const defaultUser: UserProfile = {
-  id: '',
-  email: '',
-  avatar: '',
-  name: '',
-  username: '',
-}
-
-export const AuthContext = createContext<{ user: UserProfile }>({
-  user: defaultUser,
-})
+export const AuthContext = createContext<UserProfile | null>(null)
 
 export default function AuthProvider({
   user,
   children,
 }: PropsWithChildren<{ user: UserProfile }>) {
-  return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>
 }
 
-export function useAuth() {
-  return useContext(AuthContext)
+export function useCurrentUser() {
+  const user = useContext(AuthContext)
+
+  if (user === null) {
+    throw new Error('useCurrentUser cannot be called without an AuthProvider')
+  }
+
+  return user
 }
