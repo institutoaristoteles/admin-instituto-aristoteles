@@ -1,6 +1,6 @@
 'use client'
 
-import { Children, ReactElement, useCallback } from 'react'
+import { useCallback } from 'react'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import clsx from 'clsx'
@@ -10,15 +10,7 @@ export interface BreadcrumbItem {
   path?: string
 }
 
-type BreadcrumbsChildren =
-  | ReactElement<BreadcrumbItem>
-  | ReactElement<BreadcrumbItem>[]
-
-export function Breadcrumbs({ children }: { children?: BreadcrumbsChildren }) {
-  const typedChildren = Children.toArray(
-    children,
-  ) as ReactElement<BreadcrumbItem>[]
-
+export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   const renderItem = useCallback((item: BreadcrumbItem) => {
     if (item.path) {
       return (
@@ -39,8 +31,8 @@ export function Breadcrumbs({ children }: { children?: BreadcrumbsChildren }) {
       <ul className="flex items-center gap-2 text-text-color-secondary text-sm py-5">
         <li
           className={clsx('flex items-center', {
-            "after:content-['/']": typedChildren.length === 0,
-            'after:ml-2': typedChildren.length === 0,
+            "after:content-['/']": items.length === 0,
+            'after:ml-2': items.length === 0,
           })}
         >
           <Link href="/" title="Home" className="text-text-color">
@@ -48,19 +40,15 @@ export function Breadcrumbs({ children }: { children?: BreadcrumbsChildren }) {
           </Link>
         </li>
 
-        {typedChildren.map((item, index) => (
+        {items.map((item, index) => (
           <li
             key={index}
             className="flex items-center before:content-['/'] before:mr-2"
           >
-            {renderItem(item.props)}
+            {renderItem(item)}
           </li>
         ))}
       </ul>
     </div>
   )
-}
-
-export function Breadcrumb(_: BreadcrumbItem) {
-  return <></>
 }

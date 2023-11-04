@@ -1,27 +1,23 @@
 import React from 'react'
 import CategoryForm from '@/app/(admin)/categorias/category-form'
 import { Metadata } from 'next'
-import { Breadcrumb, Breadcrumbs } from '@/shared/components/breadcrumbs'
+import { BreadcrumbItem } from '@/shared/components/breadcrumbs'
+import PageHeader from '@/shared/components/page-header'
 
 export const metadata: Metadata = {
   title: 'Nova categoria',
 }
 
 export default function NewCategoryPage() {
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: 'Categorias', path: '/categorias' },
+    { label: 'Novo' },
+  ]
+
   return (
     <main>
       <div className="container">
-        <Breadcrumbs>
-          <Breadcrumb label="Categorias" path="/categorias" />
-          <Breadcrumb label="Novo" />
-        </Breadcrumbs>
-
-        <header className="flex items-center justify-between">
-          <h2 className="text-3xl font-bold text-primary pb-5">
-            Nova categoria
-          </h2>
-        </header>
-
+        <PageHeader title="Nova categoria" breadcrumbs={breadcrumbs} />
         <CategoryForm />
       </div>
     </main>
