@@ -187,7 +187,7 @@ export default function CategoriesTable() {
         <Column
           body={(category: Category) => (
             <div className="flex items-center gap-2">
-              <Link href={`/categorias/${category.id}/editar`}>
+              <Link href={`/categorias/${category.id}`}>
                 <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
               </Link>
 
