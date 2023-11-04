@@ -9,11 +9,13 @@ export const metadata: Metadata = {
   title: 'Editar categoria',
 }
 
+interface EditCategoryPageProps {
+  params: { id: string }
+}
+
 export default async function EditCategoryPage({
   params,
-}: {
-  params: { id: string }
-}) {
+}: EditCategoryPageProps) {
   const category = await getCategoryById(params.id)
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Categorias', path: '/categorias' },
