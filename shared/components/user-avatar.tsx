@@ -3,10 +3,10 @@
 import { Avatar } from 'primereact/avatar'
 import LogoutButton from '@/shared/components/logout-button'
 import React from 'react'
-import { useAuth } from '@/shared/contexts/auth-provider'
+import { useCurrentUser } from '@/shared/contexts/auth-provider'
 
 export default function UserAvatar() {
-  const { user } = useAuth()
+  const user = useCurrentUser()
 
   return (
     <div className="flex items-start gap-2 ml-auto">
