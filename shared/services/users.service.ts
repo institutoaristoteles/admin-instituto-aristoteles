@@ -1,6 +1,13 @@
+import { Role, UserProfile } from '@/shared/models/user-profile'
 import { api } from '@/shared/services/api'
-import { UserProfile } from '@/shared/models/user-profile'
 import React from 'react'
+
+export interface SaveUser {
+  username: string
+  email: string
+  password: string
+  role: Role
+}
 
 export type GetUsersFilters = Partial<{
   pageSize: number
@@ -18,3 +25,7 @@ export const getUsers = React.cache(
     return data
   },
 )
+
+export const saveUser = React.cache(async (data: SaveUser) => {
+  await api.post('/users', data)
+})

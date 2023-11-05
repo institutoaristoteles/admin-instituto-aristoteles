@@ -83,3 +83,7 @@ body, .p-component {
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
     @apply bg-surface-d text-text-color;
 }
+
+.p-password-input + i svg.p-icon {
+    display: block;
+}
