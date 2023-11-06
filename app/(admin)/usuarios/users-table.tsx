@@ -4,6 +4,7 @@ import { UserProfile } from '@/shared/models/user-profile'
 import { getUsers } from '@/shared/services/users.service'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
+import { Avatar } from 'primereact/avatar'
 import { Badge } from 'primereact/badge'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
@@ -19,8 +20,7 @@ export default function UsersTable() {
   const loadUsers = useCallback(async () => {
     setLoading(true)
     try {
-      const results = await getUsers()
-      setUsers(results)
+      setUsers(await getUsers())
     } catch (e) {
       console.error(e)
     } finally {
@@ -33,7 +33,10 @@ export default function UsersTable() {
       await loadUsers()
     })()
 
-    return () => setUsers([])
+    return () => {
+      setUsers([])
+      setSelected([])
+    }
   }, [loadUsers])
 
   return (
@@ -71,6 +74,13 @@ export default function UsersTable() {
         emptyMessage="Nenhum usuário encontrado"
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
+        <Column
+          header="Avatar"
+          bodyClassName="font-bold text-sm whitespace-nowrap"
+          body={(user: UserProfile) => (
+            <Avatar image={user.avatar} size="normal" shape="circle" />
+          )}
+        />
         <Column
           header="Nome"
           bodyClassName="font-bold text-sm whitespace-nowrap"
