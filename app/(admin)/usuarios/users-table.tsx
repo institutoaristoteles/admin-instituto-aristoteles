@@ -1,21 +1,20 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
-import { DataTable } from 'primereact/datatable'
 import { UserProfile } from '@/shared/models/user-profile'
 import { getUsers } from '@/shared/services/users.service'
-import { Column } from 'primereact/column'
 import Link from 'next/link'
-import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
 import { Badge } from 'primereact/badge'
-import { useCurrentUser } from '@/shared/contexts/auth-provider'
+import { Button } from 'primereact/button'
+import { Column } from 'primereact/column'
+import { DataTable } from 'primereact/datatable'
+import { Tag } from 'primereact/tag'
+import React, { useCallback, useEffect, useState } from 'react'
 
 export default function UsersTable() {
   const [loading, setLoading] = useState(false)
   const [users, setUsers] = useState<UserProfile[]>([])
   const [selected, setSelected] = useState<UserProfile[]>([])
-  const currentUser = useCurrentUser()
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
@@ -69,7 +68,7 @@ export default function UsersTable() {
         dataKey="id"
         paginator
         rows={10}
-        emptyMessage="Nenhuma categoria encontrada"
+        emptyMessage="Nenhum usuário encontrado"
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
         <Column
@@ -80,19 +79,17 @@ export default function UsersTable() {
         <Column header="Username" field="username" />
         <Column header="E-mail" field="email" />
         <Column
+          header="Status"
+          body={(user: UserProfile) => <Tag severity="success" value="Ativo" />}
+        />
+        <Column
           body={(user: UserProfile) => (
             <div className="flex items-center gap-2">
               <Link href={`/users/${user.id}`}>
                 <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
               </Link>
 
-              <Button
-                icon={PrimeIcons.TRASH}
-                text
-                rounded
-                severity="danger"
-                disabled={user.id === currentUser.id}
-              />
+              <Button icon={PrimeIcons.TRASH} text rounded severity="danger" />
             </div>
           )}
         />
