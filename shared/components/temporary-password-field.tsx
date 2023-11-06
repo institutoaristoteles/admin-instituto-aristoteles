@@ -37,7 +37,7 @@ function TemporaryPasswordField() {
   const copyPassword = useCallback(async () => {
     await copy(currentPassword)
     setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    setTimeout(() => setCopied(false), 300)
     toast.success('Senha copiada')
   }, [copy, currentPassword])
 
