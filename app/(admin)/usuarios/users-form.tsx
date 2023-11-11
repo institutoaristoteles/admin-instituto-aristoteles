@@ -106,7 +106,17 @@ export default function UsersForm() {
           <UserRolesField />
         </div>
 
-        <div className="fixed bg-surface-b bottom-0 left-0 w-full px-5 py-3 border-t border-t-surface-border flex items-center justify-between gap-2 md:relative md:border-none md:p-0 md:justify-end md:flex-row-reverse">
+        <div
+          className={`
+          max-md:fixed
+          max-md:bg-surface-b
+          max-md:bottom-0 max-md:left-0
+          w-full
+          max-md:px-5 max-md:py-3
+          max-md:border-t border-t-surface-border
+          flex items-center justify-between gap-2 md:justify-end md:flex-row-reverse
+        `}
+        >
           <Link href="/usuarios">
             <Button
               label="Voltar"
