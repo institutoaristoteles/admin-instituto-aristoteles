@@ -1,6 +1,6 @@
-import React from 'react'
-import { Metadata } from 'next'
 import PageHeader from '@/shared/components/page-header'
+import { Metadata } from 'next'
+import React from 'react'
 
 export const metadata: Metadata = {
   title: 'Dashboard',

@@ -1,6 +1,11 @@
-import PageHeader from '@/shared/components/page-header'
-import { BreadcrumbItem } from '@/shared/components/breadcrumbs'
 import UsersForm from '@/app/(admin)/usuarios/users-form'
+import { BreadcrumbItem } from '@/shared/components/breadcrumbs'
+import PageHeader from '@/shared/components/page-header'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Novo usuário',
+}
 
 export default function NewUserPage() {
   const breadcrumbs: BreadcrumbItem[] = [

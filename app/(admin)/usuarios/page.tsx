@@ -1,5 +1,10 @@
-import PageHeader from '@/shared/components/page-header'
 import UsersTable from '@/app/(admin)/usuarios/users-table'
+import PageHeader from '@/shared/components/page-header'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Usuários',
+}
 
 export default function UsersPage() {
   return (
