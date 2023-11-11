@@ -1,21 +1,21 @@
 'use client'
 
-import { InputText } from 'primereact/inputtext'
-import { Button } from 'primereact/button'
-import React, { useCallback, useState } from 'react'
+import { Category } from '@/shared/models/category'
 import {
   SaveCategory,
   saveCategory,
 } from '@/shared/services/categories.service'
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Category } from '@/shared/models/category'
-import toast from 'react-hot-toast'
-import { PrimeIcons } from 'primereact/api'
-import clsx from 'clsx'
 import { isConflictError } from '@/shared/utils/errors'
+import { zodResolver } from '@hookform/resolvers/zod'
+import clsx from 'clsx'
+import { useRouter } from 'next/navigation'
+import { PrimeIcons } from 'primereact/api'
+import { Button } from 'primereact/button'
+import { InputText } from 'primereact/inputtext'
+import React, { useCallback, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { z } from 'zod'
 
 const createCategoryData = z.object({
   title: z.string(),
@@ -80,22 +80,20 @@ export default function CategoryForm({ category }: { category?: Category }) {
         )}
       </label>
 
-      <div className="flex flex-col justify-end md:flex-row gap-2 w-full">
-        <Button
-          label="Salvar"
-          type="submit"
-          loading={pending}
-          className="w-full md:w-auto"
-          icon={PrimeIcons.SAVE}
-          severity="success"
-        />
+      <div className="fixed bg-surface-b bottom-0 left-0 w-full px-5 py-3 border-t border-t-surface-border flex items-center justify-between gap-2 md:relative md:border-none md:p-0 md:justify-end md:flex-row-reverse">
         <Button
           label="Cancelar"
           outlined
           type="button"
           onClick={onCancel}
-          className="w-full md:w-auto"
-          icon={PrimeIcons.CHEVRON_LEFT}
+          icon={PrimeIcons.TIMES}
+        />
+
+        <Button
+          label="Salvar"
+          type="submit"
+          loading={pending}
+          icon={PrimeIcons.SAVE}
         />
       </div>
     </form>

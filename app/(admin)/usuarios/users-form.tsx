@@ -25,7 +25,7 @@ const saveUserSchema = z.object({
     .string()
     .min(
       USERNAME_MIN_LENGTH,
-      `Nome de usuário deve conter ao menos ${USERNAME_MIN_LENGTH}`,
+      `Nome de usuário deve conter ao menos ${USERNAME_MIN_LENGTH} caracteres`,
     )
     .regex(USERNAME_PATTERN, 'Formato incorreto de usuário'),
   email: z.string().email('Informe um endereço de e-mail válido'),
@@ -50,7 +50,7 @@ export default function UsersForm() {
   } = methods
 
   const onSubmit = async (values: SaveUser) => {
-    console.log(values)
+    console.table(values)
   }
 
   return (
@@ -106,22 +106,17 @@ export default function UsersForm() {
           <UserRolesField />
         </div>
 
-        <div className="flex flex-col justify-start md:flex-row gap-2 w-full">
-          <Button
-            label="Salvar"
-            type="submit"
-            className="w-full md:w-auto"
-            icon={PrimeIcons.SAVE}
-          />
+        <div className="fixed bg-surface-b bottom-0 left-0 w-full px-5 py-3 border-t border-t-surface-border flex items-center justify-between gap-2 md:relative md:border-none md:p-0 md:justify-end md:flex-row-reverse">
           <Link href="/usuarios">
             <Button
               label="Cancelar"
               outlined
               type="button"
-              className="w-full md:w-auto"
-              icon={PrimeIcons.CHEVRON_LEFT}
+              icon={PrimeIcons.TIMES}
             />
           </Link>
+
+          <Button label="Salvar" type="submit" icon={PrimeIcons.SAVE} />
         </div>
       </form>
     </FormProvider>
