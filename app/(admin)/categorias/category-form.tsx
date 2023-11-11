@@ -82,7 +82,7 @@ export default function CategoryForm({ category }: { category?: Category }) {
 
       <div className="fixed bg-surface-b bottom-0 left-0 w-full px-5 py-3 border-t border-t-surface-border flex items-center justify-between gap-2 md:relative md:border-none md:p-0 md:justify-end md:flex-row-reverse">
         <Button
-          label="Cancelar"
+          label="Voltar"
           outlined
           type="button"
           onClick={onCancel}

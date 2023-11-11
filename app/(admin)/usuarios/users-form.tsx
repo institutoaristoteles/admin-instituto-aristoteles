@@ -56,7 +56,7 @@ export default function UsersForm() {
   return (
     <FormProvider {...methods}>
       <form
-        className="max-w-prose flex flex-col items-start gap-5"
+        className="max-w-prose flex flex-col items-start gap-5 max-md:pb-24"
         onSubmit={handleSubmit(onSubmit)}
       >
         <label className="text-sm font-bold flex flex-col gap-1 w-full">
@@ -109,7 +109,7 @@ export default function UsersForm() {
         <div className="fixed bg-surface-b bottom-0 left-0 w-full px-5 py-3 border-t border-t-surface-border flex items-center justify-between gap-2 md:relative md:border-none md:p-0 md:justify-end md:flex-row-reverse">
           <Link href="/usuarios">
             <Button
-              label="Cancelar"
+              label="Voltar"
               outlined
               type="button"
               icon={PrimeIcons.TIMES}
