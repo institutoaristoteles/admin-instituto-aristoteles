@@ -1,10 +1,10 @@
-import Image from 'next/image'
+import SidebarMenu from '@/shared/components/sidebar-menu'
+import { useSidebar } from '@/shared/contexts/sidebar-provider'
 import logoSvg from '@/shared/images/logo.svg'
 import clsx from 'clsx'
-import { useOnClickOutside } from 'usehooks-ts'
+import Image from 'next/image'
 import { useRef } from 'react'
-import { useSidebar } from '@/shared/contexts/sidebar-provider'
-import SidebarMenu from '@/shared/components/sidebar-menu'
+import { useOnClickOutside } from 'usehooks-ts'
 
 export default function Sidebar() {
   const ref = useRef(null)
@@ -29,6 +29,7 @@ export default function Sidebar() {
           alt="Logo Instituto Aristóteles"
           height={64}
           priority
+          className="max-lg:hidden"
         />
 
         <div>
