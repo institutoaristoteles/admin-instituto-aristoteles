@@ -1,17 +1,21 @@
 'use client'
 
+import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import React from 'react'
-import { PrimeIcons } from 'primereact/api'
 
-export default function LoginButton({ pending }: { pending: boolean }) {
+interface LoginButtonProps extends React.HTMLProps<'button'> {
+  pending: boolean
+}
+
+export default function LoginButton({ pending, className }: LoginButtonProps) {
   return (
     <Button
       label="Entrar"
       icon={PrimeIcons.SIGN_IN}
       type="submit"
-      size="large"
-      className="w-full"
+      size="small"
+      className={className}
       loading={pending}
     />
   )

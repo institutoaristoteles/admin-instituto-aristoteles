@@ -1,14 +1,13 @@
 'use client'
 
-import { InputText } from 'primereact/inputtext'
-import { Password } from 'primereact/password'
-import { Message } from 'primereact/message'
-import React, { FormEvent, useState } from 'react'
 import LoginButton from '@/shared/components/login-button'
-import { Button } from 'primereact/button'
 import { login } from '@/shared/services/auth.service'
 import { isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
+import { InputText } from 'primereact/inputtext'
+import { Message } from 'primereact/message'
+import { Password } from 'primereact/password'
+import React, { FormEvent, useState } from 'react'
 
 export default function LoginForm() {
   const [pending, setIsPending] = useState(false)
@@ -67,9 +66,9 @@ export default function LoginForm() {
         />
       </label>
 
-      <LoginButton pending={pending} />
-
-      <Button text label="Esqueci minha senha" type="button" size="small" />
+      <div className="border-t border-t-surface-border fixed bottom-0 py-3 px-5 flex justify-end w-full md:relative md:p-0 md:border-none">
+        <LoginButton pending={pending} className="md:w-full" />
+      </div>
     </form>
   )
 }

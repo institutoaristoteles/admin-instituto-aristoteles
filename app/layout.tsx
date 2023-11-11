@@ -1,12 +1,12 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { PropsWithChildren } from 'react'
-import 'primereact/resources/themes/lara-dark-indigo/theme.css'
-import 'primeicons/primeicons.css'
-import { PrimeReactProvider } from 'primereact/api'
+import ToastContainer from '@/shared/components/toast-container'
 import { inter } from '@/shared/fonts'
 import TailwindFix from '@/shared/utils/tailwind-fix'
-import ToastContainer from '@/shared/components/toast-container'
+import type { Metadata } from 'next'
+import 'primeicons/primeicons.css'
+import { PrimeReactProvider } from 'primereact/api'
+import 'primereact/resources/themes/lara-dark-indigo/theme.css'
+import { PropsWithChildren } from 'react'
+import './globals.css'
 
 export const metadata: Metadata = {
   title: {
