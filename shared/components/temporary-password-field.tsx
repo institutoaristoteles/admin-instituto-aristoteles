@@ -9,20 +9,7 @@ import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useCopyToClipboard } from 'usehooks-ts'
 
-function generatePassword(length: number) {
-  return generate({
-    length,
-    numbers: true,
-    strict: true,
-  })
-}
-
 function TemporaryPasswordField() {
-  const [copied, setCopied] = useState(false)
-  const [, copy] = useCopyToClipboard()
-
-  console.log('hello')
-
   const {
     register,
     setValue,
@@ -30,7 +17,11 @@ function TemporaryPasswordField() {
     formState: { errors },
   } = useFormContext<SaveUser>()
 
+  const [copied, setCopied] = useState(false)
+  const [, copy] = useCopyToClipboard()
+
   const currentPassword = watch('password', '')
+  const field = register('password')
 
   const copyPassword = useCallback(async () => {
     await copy(currentPassword)
@@ -40,10 +31,14 @@ function TemporaryPasswordField() {
   }, [copy, currentPassword])
 
   const generatePass = useCallback(async () => {
-    setValue('password', generatePassword(24))
-  }, [setValue])
+    const newPassword = generate({
+      length: 24,
+      numbers: true,
+      strict: true,
+    })
 
-  const field = register('password')
+    setValue('password', newPassword)
+  }, [setValue])
 
   return (
     <div className="flex flex-col items-start gap-1 w-full">
@@ -51,7 +46,7 @@ function TemporaryPasswordField() {
         <Password
           {...field}
           inputRef={field.ref}
-          id={field.name}
+          inputId={field.name}
           toggleMask
           feedback={false}
           className={clsx({ 'p-invalid': errors.password })}
