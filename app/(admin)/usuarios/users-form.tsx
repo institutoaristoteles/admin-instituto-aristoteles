@@ -15,7 +15,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const PASSWORD_LENGTH = 8
-const USERNAME_MIN_LENGTH = 5
+const USERNAME_MIN_LENGTH = 3
 const USERNAME_PATTERN = /^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
 
 const roleKeys = Object.keys(UserRoles) as [string, ...string[]]
@@ -31,7 +31,10 @@ const saveUserSchema = z.object({
   email: z.string().email('Informe um endereço de e-mail válido'),
   password: z
     .string({ coerce: true })
-    .min(PASSWORD_LENGTH, 'Este campo é obrigatório'),
+    .min(
+      PASSWORD_LENGTH,
+      `A senha deve possuir ao menos ${PASSWORD_LENGTH} caracteres`,
+    ),
   role: z.enum(roleKeys),
 })
 

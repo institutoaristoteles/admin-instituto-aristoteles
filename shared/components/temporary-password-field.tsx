@@ -19,6 +19,10 @@ function generatePassword(length: number) {
 
 function TemporaryPasswordField() {
   const [copied, setCopied] = useState(false)
+  const [, copy] = useCopyToClipboard()
+
+  console.log('hello')
+
   const {
     register,
     setValue,
@@ -28,32 +32,32 @@ function TemporaryPasswordField() {
 
   const currentPassword = watch('password', '')
 
-  const [, copy] = useCopyToClipboard()
-
-  const generatePass = useCallback(async () => {
-    setValue('password', generatePassword(42))
-  }, [setValue])
-
   const copyPassword = useCallback(async () => {
     await copy(currentPassword)
     setCopied(true)
     setTimeout(() => setCopied(false), 300)
-    toast.success('Senha copiada')
+    toast.success('Senha copiada para a área de transferência')
   }, [copy, currentPassword])
+
+  const generatePass = useCallback(async () => {
+    setValue('password', generatePassword(24))
+  }, [setValue])
+
+  const field = register('password')
 
   return (
     <div className="flex flex-col items-start gap-1 w-full">
       <div className="p-inputgroup flex-1">
         <Password
-          readOnly
-          inputId="password"
-          feedback={false}
+          {...field}
+          inputRef={field.ref}
+          id={field.name}
           toggleMask
-          {...register('password')}
-          value={currentPassword}
+          feedback={false}
           className={clsx({ 'p-invalid': errors.password })}
         />
         <Button
+          autoFocus
           severity={copied ? 'success' : 'info'}
           icon={copied ? PrimeIcons.CHECK : PrimeIcons.COPY}
           type="button"
@@ -61,21 +65,22 @@ function TemporaryPasswordField() {
           onClick={copyPassword}
         />
       </div>
-      <Button
-        severity="info"
-        icon={PrimeIcons.KEY}
-        label="Gerar nova senha"
-        type="button"
-        onClick={generatePass}
-        link
-        className="px-0"
-      />
 
       {errors.password && (
         <span className="text-[#ff7b7b] font-normal">
           {errors.password.message}
         </span>
       )}
+
+      <Button
+        severity="info"
+        icon={PrimeIcons.KEY}
+        label="Gerar senha"
+        type="button"
+        onClick={generatePass}
+        link
+        className="px-0 mt-2"
+      />
     </div>
   )
 }
