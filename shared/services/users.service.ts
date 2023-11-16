@@ -3,6 +3,7 @@ import { api } from '@/shared/services/api'
 import React from 'react'
 
 export interface SaveUser {
+  name: string
   username: string
   email: string
   password: string

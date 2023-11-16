@@ -80,30 +80,19 @@ export default function CategoryForm({ category }: { category?: Category }) {
         )}
       </label>
 
-      <div
-        className={`
-          max-md:fixed
-          max-md:bg-surface-b
-          max-md:bottom-0 max-md:left-0
-          w-full
-          max-md:px-5 max-md:py-3
-          max-md:border-t border-t-surface-border
-          flex items-center justify-between gap-2 md:justify-end md:flex-row-reverse
-        `}
-      >
+      <div className="flex items-center gap-2">
+        <Button
+          label="Salvar"
+          type="submit"
+          loading={pending}
+          icon={PrimeIcons.SAVE}
+        />
         <Button
           label="Voltar"
           outlined
           type="button"
           onClick={onCancel}
           icon={PrimeIcons.TIMES}
-        />
-
-        <Button
-          label="Salvar"
-          type="submit"
-          loading={pending}
-          icon={PrimeIcons.SAVE}
         />
       </div>
     </form>
