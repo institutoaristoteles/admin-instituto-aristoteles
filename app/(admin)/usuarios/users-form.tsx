@@ -92,7 +92,6 @@ export default function UsersForm() {
           Nome
           <InputText
             {...register('name')}
-            type="email"
             className={clsx({ 'p-invalid': errors.name })}
             autoFocus
           />
