@@ -3,6 +3,8 @@ export const UserRoles = {
   editor: 'Editor',
 }
 
+export type UserStatus = 'confirmed' | 'unconfirmed'
+
 export type Role = keyof typeof UserRoles
 
 export interface UserProfile {
@@ -12,4 +14,5 @@ export interface UserProfile {
   email: string
   username: string
   role: Role
+  status: UserStatus
 }

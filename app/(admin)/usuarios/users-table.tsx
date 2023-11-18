@@ -1,6 +1,6 @@
 'use client'
 
-import { UserProfile } from '@/shared/models/user-profile'
+import { UserProfile, UserStatus } from '@/shared/models/user-profile'
 import { getUsers } from '@/shared/services/users.service'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
@@ -9,7 +9,7 @@ import { Badge } from 'primereact/badge'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
-import { Tag } from 'primereact/tag'
+import { Tag, TagProps } from 'primereact/tag'
 import React, { useCallback, useEffect, useState } from 'react'
 
 export default function UsersTable() {
@@ -38,6 +38,23 @@ export default function UsersTable() {
       setSelected([])
     }
   }, [loadUsers])
+
+  const UserStatusTag = useCallback((props: { status: UserStatus }) => {
+    const statusProps: Record<UserStatus, TagProps> = {
+      confirmed: {
+        severity: 'success',
+        value: 'Confirmado',
+      },
+      unconfirmed: {
+        severity: 'warning',
+        value: 'Pendente',
+      },
+    }
+
+    return <Tag {...statusProps[props.status]} />
+  }, [])
+
+  console.log(users)
 
   return (
     <React.Fragment>
@@ -87,10 +104,14 @@ export default function UsersTable() {
           field="name"
         />
         <Column header="Username" field="username" />
-        <Column header="E-mail" field="email" />
+        <Column
+          header="Função"
+          bodyClassName="font-bold text-sm whitespace-nowrap"
+          field="role"
+        />
         <Column
           header="Status"
-          body={(user: UserProfile) => <Tag severity="success" value="Ativo" />}
+          body={(user: UserProfile) => <UserStatusTag status={user.status} />}
         />
         <Column
           body={(user: UserProfile) => (
