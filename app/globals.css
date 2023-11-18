@@ -87,3 +87,15 @@ body, .p-component {
 .p-password-input + i svg.p-icon {
     display: block;
 }
+
+.p-panel .p-panel-header {
+    @apply p-3 border-b-0;
+}
+
+.p-panel .p-panel-header .p-panel-title {
+    @apply font-normal text-sm;
+}
+
+.p-panel .p-panel-content {
+    @apply p-3 bg-surface-b;
+}

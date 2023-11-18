@@ -12,7 +12,7 @@ import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { Password } from 'primereact/password'
 import { RadioButton } from 'primereact/radiobutton'
-import React, { useCallback, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -70,23 +70,23 @@ export default function UsersForm() {
     formState: { errors },
     clearErrors,
     setValue,
+    resetField,
   } = methods
 
-  const handlePasswordType = useCallback(
-    (usesCustomPassword: boolean) => () => {
-      setCustomPassword(usesCustomPassword)
-      const newPasswordOrEmpty = !usesCustomPassword ? generatePassword() : ''
-      setValue('password', newPasswordOrEmpty)
+  const passwordField = register('password')
+
+  useEffect(() => {
+    if (!customPassword) {
+      setValue('password', generatePassword())
       clearErrors('password')
-    },
-    [clearErrors, setValue],
-  )
+    } else {
+      resetField('password')
+    }
+  }, [clearErrors, customPassword, resetField, setValue])
 
   const onSubmit = async (values: SaveUser) => {
     console.table(values)
   }
-
-  const passwordField = register('password')
 
   return (
     <FormProvider {...methods}>
@@ -153,7 +153,7 @@ export default function UsersForm() {
           <div className="flex flex-col gap-5 py-5">
             <label className="flex items-center gap-2">
               <RadioButton
-                onChange={handlePasswordType(false)}
+                onChange={() => setCustomPassword(false)}
                 checked={!customPassword}
               />
               Gerar automaticamente
@@ -161,7 +161,7 @@ export default function UsersForm() {
 
             <label className="flex items-center gap-2">
               <RadioButton
-                onChange={handlePasswordType(true)}
+                onChange={() => setCustomPassword(true)}
                 checked={customPassword}
               />
               Personalizada
