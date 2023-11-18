@@ -54,8 +54,6 @@ export default function UsersTable() {
     return <Tag {...statusProps[props.status]} />
   }, [])
 
-  console.log(users)
-
   return (
     <React.Fragment>
       <header className="flex items-center justify-between gap-5 pb-5">
