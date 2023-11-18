@@ -1,11 +1,11 @@
 import { UserRoles } from '@/shared/models/user-profile'
 import { SaveUser } from '@/shared/services/users.service'
 import clsx from 'clsx'
-import { Dropdown } from 'primereact/dropdown'
+import { Dropdown, DropdownProps } from 'primereact/dropdown'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
-function UserRolesField() {
+function UserRolesField(props: Partial<DropdownProps>) {
   const {
     register,
     watch,
@@ -35,6 +35,7 @@ function UserRolesField() {
           focusInputRef={field.ref}
           inputId={field.name}
           className={clsx({ 'p-invalid': errors.role })}
+          {...props}
         />
       </div>
 

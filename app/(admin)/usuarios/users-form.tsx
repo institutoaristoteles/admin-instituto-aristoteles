@@ -1,18 +1,17 @@
 'use client'
 
+import TemporaryPasswordField from '@/shared/components/temporary-password-field'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
 import { SaveUser } from '@/shared/services/users.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
-import { generate } from 'generate-password'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
-import { Password } from 'primereact/password'
-import { RadioButton } from 'primereact/radiobutton'
-import React, { useEffect, useState } from 'react'
+import { Message } from 'primereact/message'
+import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -47,14 +46,6 @@ const saveUserSchema = z.object({
   role: z.enum(roleKeys),
 })
 
-function generatePassword() {
-  return generate({
-    length: 24,
-    numbers: true,
-    strict: true,
-  })
-}
-
 export default function UsersForm() {
   const methods = useForm<SaveUser>({
     resolver: zodResolver(saveUserSchema),
@@ -62,30 +53,17 @@ export default function UsersForm() {
     reValidateMode: 'onChange',
     defaultValues: { role: 'editor' },
   })
-  const [customPassword, setCustomPassword] = useState(false)
+  const [success, setSuccess] = useState(false)
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    clearErrors,
-    setValue,
-    resetField,
   } = methods
-
-  const passwordField = register('password')
-
-  useEffect(() => {
-    if (!customPassword) {
-      setValue('password', generatePassword())
-      clearErrors('password')
-    } else {
-      resetField('password')
-    }
-  }, [clearErrors, customPassword, resetField, setValue])
 
   const onSubmit = async (values: SaveUser) => {
     console.table(values)
+    setSuccess(true)
   }
 
   return (
@@ -94,11 +72,20 @@ export default function UsersForm() {
         className="max-w-prose flex flex-col items-start gap-5"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {success && (
+          <Message
+            text="Usuário criado com successo"
+            severity="success"
+            className="w-full"
+          />
+        )}
+
         <label className="text-sm font-bold flex flex-col gap-1 w-full">
           Nome
           <InputText
             {...register('name')}
             className={clsx({ 'p-invalid': errors.name })}
+            disabled={success}
             autoFocus
           />
           {methods.formState.errors.name && (
@@ -112,6 +99,7 @@ export default function UsersForm() {
           Usuário
           <InputText
             {...register('username')}
+            disabled={success}
             className={clsx({ 'p-invalid': errors.username })}
           />
           {errors.username && (
@@ -126,6 +114,7 @@ export default function UsersForm() {
           <InputText
             {...register('email')}
             type="email"
+            disabled={success}
             className={clsx({ 'p-invalid': errors.email })}
           />
           {methods.formState.errors.email && (
@@ -140,7 +129,7 @@ export default function UsersForm() {
             Perfil
           </label>
 
-          <UserRolesField />
+          <UserRolesField disabled={success} />
         </div>
 
         <div className="flex flex-col items-start gap-1 w-full">
@@ -150,46 +139,16 @@ export default function UsersForm() {
           >
             Senha Provisória
           </label>
-          <div className="flex flex-col gap-5 py-5">
-            <label className="flex items-center gap-2">
-              <RadioButton
-                onChange={() => setCustomPassword(false)}
-                checked={!customPassword}
-              />
-              Gerar automaticamente
-            </label>
-
-            <label className="flex items-center gap-2">
-              <RadioButton
-                onChange={() => setCustomPassword(true)}
-                checked={customPassword}
-              />
-              Personalizada
-            </label>
-          </div>
-
-          {customPassword && (
-            <Password
-              {...passwordField}
-              inputRef={passwordField.ref}
-              inputId={passwordField.name}
-              autoFocus
-              toggleMask
-              feedback={false}
-              inputClassName="w-full"
-              className={clsx('w-full', { 'p-invalid': errors.password })}
-            />
-          )}
-
-          {errors.password && (
-            <span className="text-[#ff7b7b] font-normal">
-              {errors.password.message}
-            </span>
-          )}
+          <TemporaryPasswordField disabled={success} />
         </div>
 
         <div className="flex items-center gap-2">
-          <Button label="Salvar" type="submit" icon={PrimeIcons.SAVE} />
+          <Button
+            label="Salvar"
+            type="submit"
+            icon={PrimeIcons.SAVE}
+            disabled={success}
+          />
 
           <Link href="/usuarios">
             <Button
