@@ -17,18 +17,24 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const PASSWORD_LENGTH = 8
+const NAME_MIN_LENGTH = 3
 const USERNAME_MIN_LENGTH = 3
 const USERNAME_PATTERN = /^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
 
 const roleKeys = Object.keys(UserRoles) as [string, ...string[]]
 
 const saveUserSchema = z.object({
-  name: z.string().min(3, 'Mínimo de 3 caracteres'),
+  name: z
+    .string()
+    .min(
+      NAME_MIN_LENGTH,
+      `Nome do usuário deve conter ao menos ${NAME_MIN_LENGTH} caracteres`,
+    ),
   username: z
     .string()
     .min(
       USERNAME_MIN_LENGTH,
-      `Nome de usuário deve conter ao menos ${USERNAME_MIN_LENGTH} caracteres`,
+      `Usuário deve conter ao menos ${USERNAME_MIN_LENGTH} caracteres`,
     )
     .regex(USERNAME_PATTERN, 'Formato incorreto de usuário'),
   email: z.string().email('Informe um endereço de e-mail válido'),
