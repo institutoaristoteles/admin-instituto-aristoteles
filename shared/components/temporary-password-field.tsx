@@ -3,18 +3,19 @@ import clsx from 'clsx'
 import { generate } from 'generate-password'
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
-import { Password } from 'primereact/password'
+import { Password, PasswordProps } from 'primereact/password'
 import React, { useCallback, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { useCopyToClipboard } from 'usehooks-ts'
 
-function TemporaryPasswordField() {
+function TemporaryPasswordField(props: Partial<PasswordProps>) {
   const {
     register,
     setValue,
     watch,
     formState: { errors },
+    resetField,
   } = useFormContext<SaveUser>()
 
   const [copied, setCopied] = useState(false)
@@ -31,6 +32,7 @@ function TemporaryPasswordField() {
   }, [copy, currentPassword])
 
   const generatePass = useCallback(async () => {
+    resetField('password')
     const newPassword = generate({
       length: 24,
       numbers: true,
@@ -38,7 +40,7 @@ function TemporaryPasswordField() {
     })
 
     setValue('password', newPassword)
-  }, [setValue])
+  }, [resetField, setValue])
 
   return (
     <div className="flex flex-col items-start gap-1 w-full">
@@ -50,6 +52,7 @@ function TemporaryPasswordField() {
           toggleMask
           feedback={false}
           className={clsx({ 'p-invalid': errors.password })}
+          {...props}
         />
         <Button
           autoFocus
@@ -67,15 +70,17 @@ function TemporaryPasswordField() {
         </span>
       )}
 
-      <Button
-        severity="info"
-        icon={PrimeIcons.KEY}
-        label="Gerar senha"
-        type="button"
-        onClick={generatePass}
-        link
-        className="px-0 mt-2"
-      />
+      {!props.disabled && !props.readOnly && (
+        <Button
+          severity="info"
+          icon={PrimeIcons.KEY}
+          label="Gerar automaticamente"
+          type="button"
+          onClick={generatePass}
+          link
+          className="px-0 mt-2"
+        />
+      )}
     </div>
   )
 }
