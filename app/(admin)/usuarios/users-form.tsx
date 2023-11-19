@@ -3,7 +3,7 @@
 import TemporaryPasswordField from '@/shared/components/temporary-password-field'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
-import { SaveUser } from '@/shared/services/users.service'
+import { saveUser, SaveUser } from '@/shared/services/users.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -11,8 +11,9 @@ import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { Message } from 'primereact/message'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { z } from 'zod'
 
 const PASSWORD_LENGTH = 8
@@ -54,6 +55,7 @@ export default function UsersForm() {
     defaultValues: { role: 'editor' },
   })
   const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const {
     register,
@@ -61,10 +63,18 @@ export default function UsersForm() {
     formState: { errors },
   } = methods
 
-  const onSubmit = async (values: SaveUser) => {
-    console.table(values)
-    setSuccess(true)
-  }
+  const onSubmit = useCallback(async (values: SaveUser) => {
+    setLoading(true)
+    try {
+      await saveUser(values)
+      setSuccess(true)
+      toast.success('Usuário criado com sucesso')
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   return (
     <FormProvider {...methods}>
@@ -148,6 +158,7 @@ export default function UsersForm() {
             type="submit"
             icon={PrimeIcons.SAVE}
             disabled={success}
+            loading={loading}
           />
 
           <Link href="/usuarios">
