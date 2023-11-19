@@ -98,9 +98,9 @@ export default function UsersForm() {
             disabled={success}
             autoFocus
           />
-          {methods.formState.errors.name && (
+          {errors.name && (
             <span className="text-[#ff7b7b] font-normal">
-              {methods.formState.errors.name.message}
+              {errors.name.message}
             </span>
           )}
         </label>
@@ -127,9 +127,9 @@ export default function UsersForm() {
             disabled={success}
             className={clsx({ 'p-invalid': errors.email })}
           />
-          {methods.formState.errors.email && (
+          {errors.email && (
             <span className="text-[#ff7b7b] font-normal">
-              {methods.formState.errors.email.message}
+              {errors.email.message}
             </span>
           )}
         </label>
