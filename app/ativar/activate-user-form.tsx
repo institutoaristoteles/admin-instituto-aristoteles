@@ -42,6 +42,7 @@ export default function ActivateUserForm({ user }: { user: UserProfile }) {
   const logoutAndRedirect = useCallback(() => {
     logout()
     router.push('/')
+    router.refresh()
   }, [router])
 
   const onSubmit = useCallback(

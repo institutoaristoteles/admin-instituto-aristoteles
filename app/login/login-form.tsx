@@ -30,6 +30,7 @@ export default function LoginForm() {
     try {
       await login(data.username, data.password)
       router.push('/')
+      router.refresh()
     } catch (e) {
       const errorMessage =
         isAxiosError(e) && e.response?.status === 401
