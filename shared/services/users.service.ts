@@ -10,6 +10,11 @@ export interface SaveUser {
   role: Role
 }
 
+export interface ActivateUserPassword {
+  oldPassword: string
+  newPassword: string
+}
+
 export type GetUsersFilters = Partial<{
   pageSize: number
   page: number
@@ -30,3 +35,9 @@ export const getUsers = React.cache(
 export const saveUser = React.cache(async (data: SaveUser) => {
   await api.post('/users', data)
 })
+
+export const activateUser = React.cache(
+  async (userId: string, data: ActivateUserPassword) => {
+    await api.put(`/users/${userId}/activate-user`, data)
+  },
+)

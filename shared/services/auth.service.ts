@@ -21,6 +21,7 @@ interface LoginResponse {
 }
 
 interface JwtToken {
+  status: 'confirmed' | 'unconfirmed'
   role: Role
   sub: string
   picture: string | undefined
@@ -47,6 +48,7 @@ function mapJwtToUserProfile(jwt: JwtToken): UserProfile {
     email: jwt.email,
     username: jwt.preferred_username,
     role: jwt.role,
+    status: jwt.status,
   }
 }
 
