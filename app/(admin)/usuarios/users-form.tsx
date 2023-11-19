@@ -1,5 +1,8 @@
 'use client'
 
+import SuccessUserDialog, {
+  SuccessModalProps,
+} from '@/app/(admin)/usuarios/novo/success-user-dialog'
 import TemporaryPasswordField from '@/shared/components/temporary-password-field'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
@@ -10,8 +13,7 @@ import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
-import { Message } from 'primereact/message'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
@@ -54,8 +56,8 @@ export default function UsersForm() {
     reValidateMode: 'onChange',
     defaultValues: { role: 'editor' },
   })
-  const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+  const successModalRef = useRef<SuccessModalProps>(null)
 
   const {
     register,
@@ -67,8 +69,8 @@ export default function UsersForm() {
     setLoading(true)
     try {
       await saveUser(values)
-      setSuccess(true)
       toast.success('Usuário criado com sucesso')
+      successModalRef.current?.open(values)
     } catch (e) {
       console.error(e)
     } finally {
@@ -82,20 +84,11 @@ export default function UsersForm() {
         className="max-w-prose flex flex-col items-start gap-5"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {success && (
-          <Message
-            text="Usuário criado com successo"
-            severity="success"
-            className="w-full"
-          />
-        )}
-
         <label className="text-sm font-bold flex flex-col gap-1 w-full">
           Nome
           <InputText
             {...register('name')}
             className={clsx({ 'p-invalid': errors.name })}
-            disabled={success}
             autoFocus
           />
           {errors.name && (
@@ -109,7 +102,6 @@ export default function UsersForm() {
           Usuário
           <InputText
             {...register('username')}
-            disabled={success}
             className={clsx({ 'p-invalid': errors.username })}
           />
           {errors.username && (
@@ -124,7 +116,6 @@ export default function UsersForm() {
           <InputText
             {...register('email')}
             type="email"
-            disabled={success}
             className={clsx({ 'p-invalid': errors.email })}
           />
           {errors.email && (
@@ -139,7 +130,7 @@ export default function UsersForm() {
             Perfil
           </label>
 
-          <UserRolesField disabled={success} />
+          <UserRolesField />
         </div>
 
         <div className="flex flex-col items-start gap-1 w-full">
@@ -149,7 +140,7 @@ export default function UsersForm() {
           >
             Senha Provisória
           </label>
-          <TemporaryPasswordField disabled={success} />
+          <TemporaryPasswordField />
         </div>
 
         <div className="flex items-center gap-2">
@@ -157,7 +148,6 @@ export default function UsersForm() {
             label="Salvar"
             type="submit"
             icon={PrimeIcons.SAVE}
-            disabled={success}
             loading={loading}
           />
 
@@ -171,6 +161,8 @@ export default function UsersForm() {
           </Link>
         </div>
       </form>
+
+      <SuccessUserDialog ref={successModalRef} />
     </FormProvider>
   )
 }

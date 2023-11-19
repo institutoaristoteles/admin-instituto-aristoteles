@@ -1,13 +1,12 @@
+import CopyButton from '@/shared/components/copy-button'
 import { SaveUser } from '@/shared/services/users.service'
 import clsx from 'clsx'
 import { generate } from 'generate-password'
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { Password, PasswordProps } from 'primereact/password'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { useCopyToClipboard } from 'usehooks-ts'
 
 function TemporaryPasswordField(props: Partial<PasswordProps>) {
   const {
@@ -18,18 +17,8 @@ function TemporaryPasswordField(props: Partial<PasswordProps>) {
     resetField,
   } = useFormContext<SaveUser>()
 
-  const [copied, setCopied] = useState(false)
-  const [, copy] = useCopyToClipboard()
-
   const currentPassword = watch('password', '')
   const field = register('password')
-
-  const copyPassword = useCallback(async () => {
-    await copy(currentPassword)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 300)
-    toast.success('Senha copiada para a área de transferência')
-  }, [copy, currentPassword])
 
   const generatePass = useCallback(async () => {
     resetField('password')
@@ -54,14 +43,8 @@ function TemporaryPasswordField(props: Partial<PasswordProps>) {
           className={clsx({ 'p-invalid': errors.password })}
           {...props}
         />
-        <Button
-          autoFocus
-          severity={copied ? 'success' : 'info'}
-          icon={copied ? PrimeIcons.CHECK : PrimeIcons.COPY}
-          type="button"
-          disabled={!currentPassword.length}
-          onClick={copyPassword}
-        />
+
+        <CopyButton value={currentPassword} />
       </div>
 
       {errors.password && (
