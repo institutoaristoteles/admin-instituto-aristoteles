@@ -1,7 +1,6 @@
 'use client'
 
 import SuccessUserDialog from '@/app/(admin)/usuarios/novo/success-user-dialog'
-import TemporaryPasswordField from '@/shared/components/temporary-password-field'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
 import { saveUser, SaveUser } from '@/shared/services/users.service'
@@ -14,10 +13,8 @@ import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import React, { useCallback, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import { z } from 'zod'
 
-const PASSWORD_LENGTH = 8
 const NAME_MIN_LENGTH = 3
 const USERNAME_MIN_LENGTH = 3
 const USERNAME_PATTERN = /^(?=[a-zA-Z0-9._]{5,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
@@ -39,12 +36,6 @@ const saveUserSchema = z.object({
     )
     .regex(USERNAME_PATTERN, 'Formato incorreto de usuário'),
   email: z.string().email('Informe um endereço de e-mail válido'),
-  password: z
-    .string({ coerce: true })
-    .min(
-      PASSWORD_LENGTH,
-      `A senha deve possuir ao menos ${PASSWORD_LENGTH} caracteres`,
-    ),
   role: z.enum(roleKeys),
 })
 
@@ -75,7 +66,6 @@ export default function UsersForm() {
     setLoading(true)
     try {
       await saveUser(values)
-      toast.success('Usuário criado com sucesso')
       setUserCreated(values)
     } catch (e) {
       console.error(e)
@@ -139,16 +129,6 @@ export default function UsersForm() {
           <UserRolesField />
         </div>
 
-        <div className="flex flex-col items-start gap-1 w-full">
-          <label
-            className="text-sm font-bold flex flex-col items-start gap-1 w-full"
-            htmlFor="password"
-          >
-            Senha Provisória
-          </label>
-          <TemporaryPasswordField />
-        </div>
-
         <div className="flex items-center gap-2">
           <Button
             label="Salvar"
@@ -162,7 +142,7 @@ export default function UsersForm() {
               label="Voltar"
               outlined
               type="button"
-              icon={PrimeIcons.TIMES}
+              icon={PrimeIcons.CHEVRON_LEFT}
             />
           </Link>
         </div>

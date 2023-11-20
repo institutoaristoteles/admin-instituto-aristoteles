@@ -6,7 +6,6 @@ export interface SaveUser {
   name: string
   username: string
   email: string
-  password: string
   role: Role
 }
 
