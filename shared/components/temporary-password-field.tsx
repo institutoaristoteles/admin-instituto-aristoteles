@@ -1,4 +1,3 @@
-import CopyButton from '@/shared/components/copy-button'
 import { SaveUser } from '@/shared/services/users.service'
 import clsx from 'clsx'
 import { generate } from 'generate-password'
@@ -12,12 +11,10 @@ function TemporaryPasswordField(props: Partial<PasswordProps>) {
   const {
     register,
     setValue,
-    watch,
     formState: { errors },
     resetField,
   } = useFormContext<SaveUser>()
 
-  const currentPassword = watch('password', '')
   const field = register('password')
 
   const generatePass = useCallback(async () => {
@@ -33,9 +30,11 @@ function TemporaryPasswordField(props: Partial<PasswordProps>) {
 
   return (
     <div className="flex flex-col items-start gap-1 w-full">
-      <div className="p-inputgroup flex-1">
+      <div className="p-inputgroup">
         <Password
-          {...field}
+          name={field.name}
+          onChange={field.onChange}
+          onBlur={field.onBlur}
           inputRef={field.ref}
           inputId={field.name}
           toggleMask
@@ -43,8 +42,6 @@ function TemporaryPasswordField(props: Partial<PasswordProps>) {
           className={clsx({ 'p-invalid': errors.password })}
           {...props}
         />
-
-        <CopyButton value={currentPassword} />
       </div>
 
       {errors.password && (

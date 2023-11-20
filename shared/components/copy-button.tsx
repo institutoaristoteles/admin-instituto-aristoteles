@@ -3,7 +3,13 @@ import { Button } from 'primereact/button'
 import React, { useCallback, useState } from 'react'
 import { useCopyToClipboard } from 'usehooks-ts'
 
-function CopyButton({ value, onCopy }: { value: any; onCopy?: () => void }) {
+interface CopyButtonProps extends React.ComponentProps<typeof Button> {
+  label: string
+  value: any
+  onCopy?: () => void
+}
+
+function CopyButton({ value, onCopy, label, ...props }: CopyButtonProps) {
   const [copied, setCopied] = useState(false)
 
   const [, copy] = useCopyToClipboard()
@@ -23,6 +29,9 @@ function CopyButton({ value, onCopy }: { value: any; onCopy?: () => void }) {
       type="button"
       disabled={!value.length}
       onClick={copyToClipboard}
+      link
+      label={label}
+      {...props}
     />
   )
 }

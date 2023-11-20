@@ -1,8 +1,6 @@
 'use client'
 
-import SuccessUserDialog, {
-  SuccessModalProps,
-} from '@/app/(admin)/usuarios/novo/success-user-dialog'
+import SuccessUserDialog from '@/app/(admin)/usuarios/novo/success-user-dialog'
 import TemporaryPasswordField from '@/shared/components/temporary-password-field'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
@@ -10,10 +8,11 @@ import { saveUser, SaveUser } from '@/shared/services/users.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
@@ -57,7 +56,14 @@ export default function UsersForm() {
     defaultValues: { role: 'editor' },
   })
   const [loading, setLoading] = useState(false)
-  const successModalRef = useRef<SuccessModalProps>(null)
+  const router = useRouter()
+
+  const [userCreated, setUserCreated] = useState<SaveUser>()
+
+  const onHide = useCallback(() => {
+    router.push('/usuarios')
+    router.refresh()
+  }, [router])
 
   const {
     register,
@@ -70,7 +76,7 @@ export default function UsersForm() {
     try {
       await saveUser(values)
       toast.success('Usuário criado com sucesso')
-      successModalRef.current?.open(values)
+      setUserCreated(values)
     } catch (e) {
       console.error(e)
     } finally {
@@ -162,7 +168,7 @@ export default function UsersForm() {
         </div>
       </form>
 
-      <SuccessUserDialog ref={successModalRef} />
+      <SuccessUserDialog user={userCreated} onClose={onHide} />
     </FormProvider>
   )
 }

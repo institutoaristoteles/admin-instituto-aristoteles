@@ -35,19 +35,35 @@ body, .p-component {
 }
 
 .p-inline-message.p-inline-message-warn {
-    background: #ff8c0021;
+    background: #ce781a;
+    border-color: #ce781a;
+    color: #fff;
 }
 
 .p-inline-message.p-inline-message-info {
-    background: #00008b21;
+    background: #696cff;
+    border-color: #696cff;
+    color: #fff;
 }
 
 .p-inline-message.p-inline-message-success {
-    background: #00640024;
+    background: #006400;
+    border-color: #006400;
+    color: #fff;
 }
 
 .p-inline-message.p-inline-message-error {
-    background: #8b00002b;
+    background: #8b0000;
+    border-color: #8b0000;
+    color: #fff;
+}
+
+.p-inline-message .p-inline-message-text {
+    @apply text-sm;
+}
+
+.p-inline-message .p-inline-message-icon.p-icon {
+    color: #fff;
 }
 
 .p-datatable .p-datatable-tbody > tr:not(tr.p-highlight) {

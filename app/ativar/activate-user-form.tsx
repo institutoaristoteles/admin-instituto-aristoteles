@@ -1,7 +1,7 @@
 'use client'
 
 import { UserProfile } from '@/shared/models/user-profile'
-import { logout } from '@/shared/services/auth.service'
+import { login, logout } from '@/shared/services/auth.service'
 import {
   activateUser,
   ActivateUserPassword,
@@ -18,9 +18,21 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
 
+const PASSWORD_MIN_LENGTH = 6
+
 const activateUserPasswordSchema = z.object({
-  oldPassword: z.string().min(6),
-  newPassword: z.string().min(6),
+  oldPassword: z
+    .string()
+    .min(
+      PASSWORD_MIN_LENGTH,
+      `A senha deve possuir no mínimo ${PASSWORD_MIN_LENGTH} caracteres`,
+    ),
+  newPassword: z
+    .string()
+    .min(
+      PASSWORD_MIN_LENGTH,
+      `A senha deve possuir no mínimo ${PASSWORD_MIN_LENGTH} caracteres`,
+    ),
 })
 
 export default function ActivateUserForm({ user }: { user: UserProfile }) {
@@ -39,11 +51,15 @@ export default function ActivateUserForm({ user }: { user: UserProfile }) {
   const oldPasswordField = register('oldPassword')
   const newPasswordField = register('newPassword')
 
-  const logoutAndRedirect = useCallback(() => {
-    logout()
+  const redirect = useCallback(() => {
     router.push('/')
     router.refresh()
   }, [router])
+
+  const logoutAndRedirect = useCallback(() => {
+    logout()
+    redirect()
+  }, [redirect])
 
   const onSubmit = useCallback(
     async (values: ActivateUserPassword) => {
@@ -52,7 +68,8 @@ export default function ActivateUserForm({ user }: { user: UserProfile }) {
       try {
         await activateUser(user.id, values)
         toast.success('Senha atualizada com sucesso!')
-        logoutAndRedirect()
+        await login(user.username, values.newPassword)
+        redirect()
       } catch (e) {
         console.error(e)
 
@@ -63,7 +80,7 @@ export default function ActivateUserForm({ user }: { user: UserProfile }) {
         setLoading(false)
       }
     },
-    [logoutAndRedirect, setError, user.id],
+    [redirect, setError, user.id, user.username],
   )
 
   return (
