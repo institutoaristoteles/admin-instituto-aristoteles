@@ -67,8 +67,8 @@ export default function LoginForm() {
         />
       </label>
 
-      <div className="border-t border-t-surface-border fixed bottom-0 py-3 px-5 flex justify-end w-full md:relative md:p-0 md:border-none">
-        <LoginButton pending={pending} className="md:w-full" />
+      <div className="flex justify-end w-full">
+        <LoginButton pending={pending} className="w-full" />
       </div>
     </form>
   )

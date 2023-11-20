@@ -1,11 +1,21 @@
-import React, { PropsWithChildren } from 'react'
+import clsx from 'clsx'
+import React, { HTMLAttributes, PropsWithChildren } from 'react'
 
-function LabeledInput({
-  label,
-  children,
-}: PropsWithChildren<{ label: string }>) {
+interface LabeledInputProps
+  extends PropsWithChildren,
+    HTMLAttributes<HTMLLabelElement> {
+  label: string
+}
+
+function LabeledInput({ label, children, ...props }: LabeledInputProps) {
   return (
-    <label className="text-sm font-bold flex flex-col gap-1 w-full">
+    <label
+      {...props}
+      className={clsx(
+        'text-sm font-bold flex flex-col gap-1 w-full',
+        props.className,
+      )}
+    >
       {label}
       {children}
     </label>
