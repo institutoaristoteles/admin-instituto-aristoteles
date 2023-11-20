@@ -53,8 +53,8 @@ body, .p-component {
 }
 
 .p-inline-message.p-inline-message-error {
-    background: #8b0000;
-    border-color: #8b0000;
+    background: #b93c3c;
+    border-color: #b93c3c;
     color: #fff;
 }
 
