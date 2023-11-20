@@ -42,7 +42,7 @@ function SuccessUserModal(props: SuccessModalProps) {
       visible={!!props.user}
       draggable={false}
       closable={false}
-      className="min-w-[50%]"
+      className="min-w-[30%]"
       footer={footer}
     >
       <Message

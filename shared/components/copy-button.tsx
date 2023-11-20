@@ -23,7 +23,6 @@ function CopyButton({ value, onCopy, label, ...props }: CopyButtonProps) {
 
   return (
     <Button
-      autoFocus
       severity={copied ? 'success' : 'info'}
       icon={copied ? PrimeIcons.CHECK : PrimeIcons.COPY}
       type="button"
