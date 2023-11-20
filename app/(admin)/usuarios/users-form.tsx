@@ -1,6 +1,7 @@
 'use client'
 
 import SuccessUserDialog from '@/app/(admin)/usuarios/novo/success-user-dialog'
+import LabeledInput from '@/shared/components/LabeledInput'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
 import { saveUser, SaveUser } from '@/shared/services/users.service'
@@ -80,8 +81,7 @@ export default function UsersForm() {
         className="max-w-prose flex flex-col items-start gap-5"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <label className="text-sm font-bold flex flex-col gap-1 w-full">
-          Nome
+        <LabeledInput label="Nome">
           <InputText
             {...register('name')}
             className={clsx({ 'p-invalid': errors.name })}
@@ -92,10 +92,9 @@ export default function UsersForm() {
               {errors.name.message}
             </span>
           )}
-        </label>
+        </LabeledInput>
 
-        <label className="text-sm font-bold flex flex-col gap-1 w-full">
-          Usuário
+        <LabeledInput label="Usuário">
           <InputText
             {...register('username')}
             className={clsx({ 'p-invalid': errors.username })}
@@ -105,10 +104,9 @@ export default function UsersForm() {
               {errors.username.message}
             </span>
           )}
-        </label>
+        </LabeledInput>
 
-        <label className="text-sm font-bold flex flex-col gap-1 w-full">
-          E-mail
+        <LabeledInput label="E-mail">
           <InputText
             {...register('email')}
             type="email"
@@ -119,15 +117,11 @@ export default function UsersForm() {
               {errors.email.message}
             </span>
           )}
-        </label>
+        </LabeledInput>
 
-        <div className="flex flex-col items-start gap-1 w-full">
-          <label className="text-sm font-bold flex flex-col items-start gap-1 w-full">
-            Perfil
-          </label>
-
+        <LabeledInput label="Perfil" className="w-auto">
           <UserRolesField />
-        </div>
+        </LabeledInput>
 
         <div className="flex items-center gap-2">
           <Button
