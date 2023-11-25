@@ -1,14 +1,23 @@
 'use client'
 
-import { UserProfile, UserStatus } from '@/shared/models/user-profile'
-import { deleteUser, getUsers } from '@/shared/services/users.service'
+import {
+  UserProfile,
+  UserRoles,
+  UserStatus,
+} from '@/shared/models/user-profile'
+import {
+  deleteUser,
+  getUsers,
+  updateUser,
+} from '@/shared/services/users.service'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import { Avatar } from 'primereact/avatar'
 import { Button } from 'primereact/button'
-import { Column } from 'primereact/column'
+import { Column, ColumnEditorOptions } from 'primereact/column'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
-import { DataTable } from 'primereact/datatable'
+import { DataTable, DataTableRowEditCompleteEvent } from 'primereact/datatable'
+import { Dropdown } from 'primereact/dropdown'
 import { Tag, TagProps } from 'primereact/tag'
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -27,16 +36,6 @@ export default function UsersTable() {
       setLoading(false)
     }
   }, [])
-
-  useEffect(() => {
-    ;(async () => {
-      await loadUsers()
-    })()
-
-    return () => {
-      setUsers([])
-    }
-  }, [loadUsers])
 
   const UserStatusTag = useCallback((props: { status: UserStatus }) => {
     const statusProps: Record<UserStatus, TagProps> = {
@@ -86,6 +85,50 @@ export default function UsersTable() {
     [removeUser],
   )
 
+  const roleEditor = useCallback((options: ColumnEditorOptions) => {
+    const roleOptions = Object.entries(UserRoles).map(([value, role]) => ({
+      name: role,
+      value,
+    }))
+
+    return (
+      <Dropdown
+        onChange={(event) => options.editorCallback?.(event.value)}
+        value={options.value}
+        options={roleOptions}
+        optionLabel="name"
+        optionValue="value"
+      />
+    )
+  }, [])
+
+  const onUserEditComplete = useCallback(
+    async (e: DataTableRowEditCompleteEvent) => {
+      const user = e.newData as UserProfile
+      setLoading(true)
+
+      try {
+        await updateUser(user.id, { role: user.role })
+        await loadUsers()
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [loadUsers],
+  )
+
+  useEffect(() => {
+    ;(async () => {
+      await loadUsers()
+    })()
+
+    return () => {
+      setUsers([])
+    }
+  }, [loadUsers])
+
   return (
     <React.Fragment>
       <header className="flex items-center justify-between gap-5 pb-5">
@@ -103,6 +146,8 @@ export default function UsersTable() {
         paginator
         rows={10}
         emptyMessage="Nenhum usuário encontrado"
+        editMode="row"
+        onRowEditComplete={onUserEditComplete}
       >
         <Column
           header="Avatar"
@@ -121,18 +166,20 @@ export default function UsersTable() {
           header="Função"
           bodyClassName="font-bold text-sm whitespace-nowrap"
           field="role"
+          editor={roleEditor}
         />
         <Column
           header="Status"
           body={(user: UserProfile) => <UserStatusTag status={user.status} />}
         />
         <Column
+          rowEditor
+          headerStyle={{ width: '10%', minWidth: '8rem' }}
+          bodyStyle={{ textAlign: 'center' }}
+        />
+        <Column
           body={(user: UserProfile) => (
             <div className="flex items-center gap-2">
-              <Link href={`/users/${user.id}`}>
-                <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
-              </Link>
-
               <Button
                 icon={PrimeIcons.TRASH}
                 text
