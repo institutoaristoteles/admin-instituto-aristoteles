@@ -149,6 +149,7 @@ export default function UsersTable() {
         emptyMessage="Nenhum usuário encontrado"
         editMode="row"
         onRowEditComplete={onUserEditComplete}
+        className="p-input-filled"
       >
         <Column
           header="Avatar"
