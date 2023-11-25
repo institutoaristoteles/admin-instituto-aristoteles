@@ -133,7 +133,7 @@ export default function UsersTable() {
   return (
     <React.Fragment>
       <header className="flex items-center justify-between gap-5 pb-5">
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center justify-between gap-2 w-full">
           <Link href="/usuarios/novo">
             <Button label="Adicionar" icon={PrimeIcons.PLUS} size="small" />
           </Link>

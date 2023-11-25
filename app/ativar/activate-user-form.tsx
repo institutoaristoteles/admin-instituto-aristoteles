@@ -66,7 +66,7 @@ export default function ActivateUserForm({ user }: { user: UserProfile }) {
       setLoading(true)
 
       try {
-        await activateUser(user.id, values)
+        await activateUser(values)
         toast.success('Senha atualizada com sucesso!')
         await login(user.username, values.newPassword)
         redirect()
