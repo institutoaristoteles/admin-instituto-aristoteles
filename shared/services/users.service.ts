@@ -35,6 +35,12 @@ export const saveUser = React.cache(async (data: SaveUser) => {
   await api.post('/users', data)
 })
 
+export const updateUser = React.cache(
+  async (userId: string, data: Pick<SaveUser, 'role'>) => {
+    await api.put(`/users/${userId}`, data)
+  },
+)
+
 export const activateUser = React.cache(
   async (userId: string, data: ActivateUserPassword) => {
     await api.put(`/users/${userId}/activate-user`, data)
