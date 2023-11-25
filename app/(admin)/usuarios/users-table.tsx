@@ -5,7 +5,6 @@ import { deleteUser, getUsers } from '@/shared/services/users.service'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import { Avatar } from 'primereact/avatar'
-import { Badge } from 'primereact/badge'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
@@ -17,7 +16,6 @@ import toast from 'react-hot-toast'
 export default function UsersTable() {
   const [loading, setLoading] = useState(false)
   const [users, setUsers] = useState<UserProfile[]>([])
-  const [selected, setSelected] = useState<UserProfile[]>([])
 
   const loadUsers = useCallback(async () => {
     setLoading(true)
@@ -37,7 +35,6 @@ export default function UsersTable() {
 
     return () => {
       setUsers([])
-      setSelected([])
     }
   }, [loadUsers])
 
@@ -62,7 +59,6 @@ export default function UsersTable() {
         setLoading(true)
         await deleteUser(id)
         await loadUsers()
-        setSelected([])
         toast.success('Categoria removida com sucesso')
       } catch (e) {
         toast.error('Ocorreu um erro ao remover a categoria')
@@ -97,34 +93,17 @@ export default function UsersTable() {
           <Link href="/usuarios/novo">
             <Button label="Adicionar" icon={PrimeIcons.PLUS} size="small" />
           </Link>
-
-          {selected.length > 0 && (
-            <Button
-              label="Excluir"
-              icon={PrimeIcons.TRASH}
-              size="small"
-              severity="danger"
-              loading={loading}
-              outlined
-            >
-              <Badge value={selected.length.toString()} severity="danger" />
-            </Button>
-          )}
         </div>
       </header>
 
       <DataTable
         value={users}
         loading={loading}
-        selection={selected}
-        selectionMode="multiple"
-        onSelectionChange={(e) => setSelected(e.value)}
         dataKey="id"
         paginator
         rows={10}
         emptyMessage="Nenhum usuário encontrado"
       >
-        <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
         <Column
           header="Avatar"
           bodyClassName="font-bold text-sm whitespace-nowrap"
