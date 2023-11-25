@@ -1,16 +1,18 @@
 'use client'
 
 import { UserProfile, UserStatus } from '@/shared/models/user-profile'
-import { getUsers } from '@/shared/services/users.service'
+import { deleteUser, getUsers } from '@/shared/services/users.service'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import { Avatar } from 'primereact/avatar'
 import { Badge } from 'primereact/badge'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
 import { DataTable } from 'primereact/datatable'
 import { Tag, TagProps } from 'primereact/tag'
 import React, { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 export default function UsersTable() {
   const [loading, setLoading] = useState(false)
@@ -53,6 +55,40 @@ export default function UsersTable() {
 
     return <Tag {...statusProps[props.status]} />
   }, [])
+
+  const removeUser = useCallback(
+    async (id: string) => {
+      try {
+        setLoading(true)
+        await deleteUser(id)
+        await loadUsers()
+        setSelected([])
+        toast.success('Categoria removida com sucesso')
+      } catch (e) {
+        toast.error('Ocorreu um erro ao remover a categoria')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [loadUsers],
+  )
+
+  const confirmUserRemoval = useCallback(
+    (user: UserProfile) => {
+      confirmDialog({
+        message: `Tem certeza que deseja excluir o usuário ${user.username}?`,
+        header: 'Excluir usuário',
+        icon: PrimeIcons.TRASH,
+        acceptClassName: 'p-button-danger',
+        rejectLabel: 'Não, cancelar',
+        acceptLabel: 'Sim, excluir',
+        async accept() {
+          await removeUser(user.id)
+        },
+      })
+    },
+    [removeUser],
+  )
 
   return (
     <React.Fragment>
@@ -118,11 +154,19 @@ export default function UsersTable() {
                 <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
               </Link>
 
-              <Button icon={PrimeIcons.TRASH} text rounded severity="danger" />
+              <Button
+                icon={PrimeIcons.TRASH}
+                text
+                rounded
+                severity="danger"
+                onClick={() => confirmUserRemoval(user)}
+              />
             </div>
           )}
         />
       </DataTable>
+
+      <ConfirmDialog />
     </React.Fragment>
   )
 }
