@@ -110,8 +110,9 @@ export default function UsersTable() {
       try {
         await updateUser(user.id, { role: user.role })
         await loadUsers()
+        toast.success('Usuário atualizado com sucesso')
       } catch (e) {
-        console.error(e)
+        toast.error('Ocorreu um erro ao atualizar o usuário')
       } finally {
         setLoading(false)
       }
