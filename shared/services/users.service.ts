@@ -41,11 +41,9 @@ export const updateUser = React.cache(
   },
 )
 
-export const activateUser = React.cache(
-  async (userId: string, data: ActivateUserPassword) => {
-    await api.put(`/users/${userId}/activate-user`, data)
-  },
-)
+export const activateUser = React.cache(async (data: ActivateUserPassword) => {
+  await api.put(`/users/me/activate-user`, data)
+})
 
 export const deleteUser = React.cache(async (id: string) => {
   await api.delete(`/users/${id}`)
