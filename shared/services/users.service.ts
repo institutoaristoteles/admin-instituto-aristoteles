@@ -48,3 +48,7 @@ export const activateUser = React.cache(async (data: ActivateUserPassword) => {
 export const deleteUser = React.cache(async (id: string) => {
   await api.delete(`/users/${id}`)
 })
+
+export const resetUser = React.cache(async (id: string) => {
+  await api.put(`/users/${id}/reset-password`)
+})
