@@ -8,6 +8,7 @@ import {
 import {
   deleteUser,
   getUsers,
+  resetUser,
   updateUser,
 } from '@/shared/services/users.service'
 import Link from 'next/link'
@@ -83,6 +84,34 @@ export default function UsersTable() {
       })
     },
     [removeUser],
+  )
+
+  const confirmUserReset = useCallback(
+    (user: UserProfile) => {
+      confirmDialog({
+        message:
+          'Ao resetar um usuário, ele será obrigado a definir uma nova senha',
+        header: `Tem certeza que deseja resetar o usuário ${user.username}?`,
+        icon: PrimeIcons.INFO_CIRCLE,
+        acceptClassName: 'p-button-warning',
+        rejectLabel: 'Não, cancelar',
+        acceptIcon: PrimeIcons.REPLAY,
+        acceptLabel: 'Sim, resetar',
+        async accept() {
+          try {
+            setLoading(true)
+            await resetUser(user.id)
+            toast.success('Reset de usuário realizado com sucesso')
+            await loadUsers()
+          } catch (e) {
+            console.error(e)
+          } finally {
+            setLoading(false)
+          }
+        },
+      })
+    },
+    [loadUsers],
   )
 
   const roleEditor = useCallback((options: ColumnEditorOptions) => {
@@ -183,11 +212,21 @@ export default function UsersTable() {
           body={(user: UserProfile) => (
             <div className="flex items-center gap-2">
               <Button
+                icon={PrimeIcons.REPLAY}
+                text
+                rounded
+                severity="info"
+                onClick={() => confirmUserReset(user)}
+                tooltip="Resetar usuário"
+              />
+
+              <Button
                 icon={PrimeIcons.TRASH}
                 text
                 rounded
                 severity="danger"
                 onClick={() => confirmUserRemoval(user)}
+                tooltip="Excluir usuário"
               />
             </div>
           )}
