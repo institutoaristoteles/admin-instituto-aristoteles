@@ -90,13 +90,15 @@ export default function UsersTable() {
     (user: UserProfile) => {
       confirmDialog({
         message:
-          'Ao resetar um usuário, ele será obrigado a definir uma nova senha',
+          'Ao resetar um usuário, ele será obrigado a definir uma nova senha na próxima vez que fizer login no sistema.',
         header: `Tem certeza que deseja resetar o usuário ${user.username}?`,
         icon: PrimeIcons.INFO_CIRCLE,
+        draggable: false,
         acceptClassName: 'p-button-warning',
         rejectLabel: 'Não, cancelar',
         acceptIcon: PrimeIcons.REPLAY,
         acceptLabel: 'Sim, resetar',
+        rejectIcon: PrimeIcons.TIMES,
         async accept() {
           try {
             setLoading(true)
