@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <main>
       <div className="container">
-        <PageHeader title="Dashboard" breadcrumbs={[{ label: 'Dashboard' }]} />
+        <PageHeader title="Seja bem vindo(a)" />
       </div>
     </main>
   )

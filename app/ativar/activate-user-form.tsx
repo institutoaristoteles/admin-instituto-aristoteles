@@ -80,7 +80,7 @@ export default function ActivateUserForm({ user }: { user: UserProfile }) {
         setLoading(false)
       }
     },
-    [redirect, setError, user.id, user.username],
+    [redirect, setError, user.username],
   )
 
   return (

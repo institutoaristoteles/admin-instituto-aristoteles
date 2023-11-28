@@ -5,6 +5,7 @@ import LabeledInput from '@/shared/components/LabeledInput'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
 import { saveUser, SaveUser } from '@/shared/services/users.service'
+import { isConflictError } from '@/shared/utils/errors'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -40,6 +41,10 @@ const saveUserSchema = z.object({
   role: z.enum(roleKeys),
 })
 
+function hasConflictOn(field: keyof SaveUser, e: unknown) {
+  return isConflictError(e) && e.response?.data.messages.includes(field)
+}
+
 export default function UsersForm() {
   const methods = useForm<SaveUser>({
     resolver: zodResolver(saveUserSchema),
@@ -61,19 +66,33 @@ export default function UsersForm() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = methods
 
-  const onSubmit = useCallback(async (values: SaveUser) => {
-    setLoading(true)
-    try {
-      await saveUser(values)
-      setUserCreated(values)
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const onSubmit = useCallback(
+    async (values: SaveUser) => {
+      setLoading(true)
+      try {
+        await saveUser(values)
+        setUserCreated(values)
+      } catch (e) {
+        console.error(e)
+
+        if (hasConflictOn('username', e)) {
+          setError('username', {
+            message: 'Este nome de usuário já está em uso',
+          })
+        }
+
+        if (hasConflictOn('email', e)) {
+          setError('email', { message: 'Este e-mail já está em uso' })
+        }
+      } finally {
+        setLoading(false)
+      }
+    },
+    [setError],
+  )
 
   return (
     <FormProvider {...methods}>

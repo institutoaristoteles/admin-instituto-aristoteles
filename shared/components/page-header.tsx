@@ -3,15 +3,15 @@ import React, { memo } from 'react'
 
 interface PageHeaderProps {
   title: string
-  breadcrumbs: BreadcrumbItem[]
+  breadcrumbs?: BreadcrumbItem[]
 }
 
-function PageHeader(props: PageHeaderProps) {
+function PageHeader({ breadcrumbs = [], title }: PageHeaderProps) {
   return (
     <>
-      <Breadcrumbs items={props.breadcrumbs} />
+      <Breadcrumbs items={breadcrumbs} />
       <header className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-primary pb-5">{props.title}</h2>
+        <h2 className="text-3xl font-bold text-primary pb-5">{title}</h2>
       </header>
     </>
   )
