@@ -1,21 +1,65 @@
 'use client'
 
-import LogoutButton from '@/shared/components/logout-button'
 import { useCurrentUser } from '@/shared/contexts/auth-provider'
+import { logout } from '@/shared/services/auth.service'
+import { useRouter } from 'next/navigation'
+import { PrimeIcons } from 'primereact/api'
 import { Avatar } from 'primereact/avatar'
-import React from 'react'
+import { Menu } from 'primereact/menu'
+import { MenuItem } from 'primereact/menuitem'
+import React, { useRef } from 'react'
 
-export default function UserAvatar() {
+function UserAvatar() {
   const user = useCurrentUser()
+  const menuRef = useRef<Menu>(null)
+  const router = useRouter()
+
+  const items: MenuItem[] = [
+    {
+      label: 'Meu perfil',
+      icon: PrimeIcons.USER_EDIT,
+      command() {
+        router.push('/perfil')
+        router.refresh()
+      },
+    },
+    { separator: true },
+    {
+      label: 'Sair',
+      icon: PrimeIcons.SIGN_OUT,
+      command() {
+        logout()
+        router.push('/login')
+        router.refresh()
+      },
+    },
+  ]
 
   return (
-    <div className="flex items-start gap-2 lg:ml-auto">
-      <Avatar image={user.avatar} label={user.name[0]} size="normal" />
+    <button
+      className="flex items-center gap-2 lg:ml-auto p-1 pr-3 bg-surface-c rounded-full transition-all hover:bg-surface-a group relative"
+      aria-controls="user-menu"
+      aria-haspopup
+      onClick={(event) => menuRef.current?.toggle(event)}
+    >
+      <Avatar
+        image={user.avatar}
+        label={user.name[0]}
+        size="normal"
+        shape="circle"
+      />
 
-      <div className="flex flex-col items-start">
-        <span>{user.name}</span>
-        <LogoutButton />
-      </div>
-    </div>
+      <span className="text-sm text-text-color">{user.name}</span>
+
+      <Menu
+        model={items}
+        ref={menuRef}
+        id="user-menu"
+        popup
+        popupAlignment="right"
+      />
+    </button>
   )
 }
+
+export default React.memo(UserAvatar)
