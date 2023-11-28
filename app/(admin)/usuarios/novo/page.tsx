@@ -1,4 +1,4 @@
-import UsersForm from '@/app/(admin)/usuarios/users-form'
+import UsersForm from '@/app/(admin)/usuarios/novo/users-form'
 import { BreadcrumbItem } from '@/shared/components/breadcrumbs'
 import PageHeader from '@/shared/components/page-header'
 import { Metadata } from 'next'
