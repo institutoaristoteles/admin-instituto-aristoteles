@@ -1,9 +1,10 @@
 'use client'
 
-import LoginButton from '@/shared/components/login-button'
 import { login } from '@/shared/services/auth.service'
 import { isAxiosError } from 'axios'
 import { useRouter } from 'next/navigation'
+import { PrimeIcons } from 'primereact/api'
+import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { Message } from 'primereact/message'
 import { Password } from 'primereact/password'
@@ -68,7 +69,14 @@ export default function LoginForm() {
       </label>
 
       <div className="flex justify-end w-full">
-        <LoginButton pending={pending} className="w-full" />
+        <Button
+          label="Entrar"
+          icon={PrimeIcons.SIGN_IN}
+          type="submit"
+          size="small"
+          className="w-full"
+          loading={pending}
+        />
       </div>
     </form>
   )
