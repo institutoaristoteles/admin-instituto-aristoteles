@@ -1,4 +1,4 @@
-import ActivateUserForm from '@/app/ativar/activate-user-form'
+import ActivateUserForm from '@/app/(auth)/ativar/activate-user-form'
 import logoSvg from '@/shared/images/logo.svg'
 import { getUser } from '@/shared/services/auth.service'
 import Image from 'next/image'

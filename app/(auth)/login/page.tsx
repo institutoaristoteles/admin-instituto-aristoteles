@@ -1,4 +1,4 @@
-import LoginForm from '@/app/login/login-form'
+import LoginForm from '@/app/(auth)/login/login-form'
 
 import logoSvg from '@/shared/images/logo.svg'
 import { getUser } from '@/shared/services/auth.service'

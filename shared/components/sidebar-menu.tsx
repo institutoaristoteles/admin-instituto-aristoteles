@@ -31,21 +31,6 @@ function SidebarMenu() {
             href="/usuarios"
             icon={<i className={PrimeIcons.USERS} />}
           />
-          <SidebarMenuItem
-            label="Configurações"
-            icon={<i className={PrimeIcons.COG} />}
-          >
-            <SidebarMenuItem
-              label="Geral"
-              href="/configuracoes"
-              icon={<i className={PrimeIcons.SLIDERS_H} />}
-            />
-            <SidebarMenuItem
-              label="Aparência"
-              href="/configuracoes/aparencia"
-              icon={<i className={PrimeIcons.PALETTE} />}
-            />
-          </SidebarMenuItem>
         </React.Fragment>
       )}
     </nav>
