@@ -44,7 +44,9 @@ function UserAvatar() {
     >
       <Avatar image={user.avatar} label={user.name[0]} shape="circle" />
 
-      <span className="text-sm text-text-color">{user.name}</span>
+      <span className="text-sm text-text-color hidden md:block">
+        {user.name}
+      </span>
 
       <Menu
         model={items}
