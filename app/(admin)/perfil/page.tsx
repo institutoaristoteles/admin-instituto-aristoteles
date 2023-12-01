@@ -11,10 +11,12 @@ export default function ProfilePage() {
       <div className="container">
         <PageHeader title="Editar perfil" breadcrumbs={breadcrumbs} />
 
-        <section className="flex flex-col gap-10">
+        <section className="flex flex-col gap-10 max-w-prose">
           <UpdateAvatarForm />
-          <UpdateUserInfoForm />
-          <UpdatePasswordForm />
+          <div className="flex flex-col gap-10">
+            <UpdateUserInfoForm />
+            <UpdatePasswordForm />
+          </div>
         </section>
       </div>
     </main>

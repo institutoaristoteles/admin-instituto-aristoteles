@@ -1,6 +1,6 @@
 'use client'
 
-import AvatarField from '@/shared/components/avatar-field'
+import AvatarField from '@/shared/components/image-upload-input'
 import LabeledInput from '@/shared/components/labeled-input'
 import axios from 'axios'
 import React, { useState } from 'react'

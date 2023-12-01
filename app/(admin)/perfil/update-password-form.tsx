@@ -9,7 +9,7 @@ import React from 'react'
 
 export default function UpdatePasswordForm() {
   return (
-    <form className="max-w-prose flex flex-col gap-5">
+    <form className="flex flex-col gap-5 p-5 rounded-2xl bg-surface-card border border-surface-border">
       <h2 className="text-text-color border-b border-b-surface-border pb-2 flex gap-5 items-center">
         <i className={clsx(PrimeIcons.KEY, 'text-sm')} />
         Mudar senha
