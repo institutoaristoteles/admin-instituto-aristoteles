@@ -20,7 +20,7 @@ export default function ImageUploadInput({
     fileInput.current?.click()
   }, [])
 
-  const handleSubmit = useCallback(
+  const handleFileSelection = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       onSelect(event.target.files?.[0])
     },
@@ -84,7 +84,7 @@ export default function ImageUploadInput({
       <input
         type="file"
         ref={fileInput}
-        onChange={handleSubmit}
+        onChange={handleFileSelection}
         className="hidden"
         accept="image/png, image/jpeg"
       />
