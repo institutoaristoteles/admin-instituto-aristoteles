@@ -42,12 +42,7 @@ function UserAvatar() {
       aria-haspopup
       onClick={(event) => menuRef.current?.toggle(event)}
     >
-      <Avatar
-        image={user.avatar}
-        label={user.name[0]}
-        size="normal"
-        shape="circle"
-      />
+      <Avatar image={user.avatar} label={user.name[0]} shape="circle" />
 
       <span className="text-sm text-text-color">{user.name}</span>
 
