@@ -12,7 +12,7 @@ export default function UpdateUserInfoForm() {
   const currentUser = useCurrentUser()
 
   return (
-    <form className="flex flex-col gap-5">
+    <form className="flex flex-col gap-5 max-w-prose">
       <h2 className="text-text-color border-b border-b-surface-border pb-2 flex gap-5 items-center">
         <i className={clsx(PrimeIcons.USER, 'text-sm')} />
         Informações de Perfil
