@@ -1,7 +1,7 @@
 'use client'
 
 import SuccessUserDialog from '@/app/(admin)/usuarios/novo/success-user-dialog'
-import LabeledInput from '@/shared/components/LabeledInput'
+import LabeledInput from '@/shared/components/labeled-input'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
 import { saveUser, SaveUser } from '@/shared/services/users.service'
