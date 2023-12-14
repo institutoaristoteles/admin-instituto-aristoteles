@@ -20,6 +20,11 @@ export interface ActivateUserPassword {
   newPassword: string
 }
 
+export interface UpdatePassword {
+  oldPassword: string
+  newPassword: string
+}
+
 export type GetUsersFilters = Partial<{
   pageSize: number
   page: number
@@ -66,6 +71,10 @@ export const deleteUser = React.cache(async (id: string) => {
 
 export const resetUser = React.cache(async (id: string) => {
   await api.put(`/users/${id}/reset-password`)
+})
+
+export const updatePassword = React.cache(async (data: UpdatePassword) => {
+  await api.put('/users/me/update-password', data)
 })
 
 export const getUserById = React.cache(async (id: string) => {

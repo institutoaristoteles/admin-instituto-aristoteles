@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
 
-export default function UpdateUserInfoForm() {
+export default function UpdateUserinfoForm() {
   const currentUser = useCurrentUser()
   const [loading, setLoading] = useState(false)
 
