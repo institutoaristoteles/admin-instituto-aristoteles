@@ -4,7 +4,7 @@ import { Button } from 'primereact/button'
 import React, { useCallback, useMemo, useRef } from 'react'
 
 interface AvatarFieldProps {
-  onSelect: (file: File | undefined) => void
+  onSelect: (file?: File) => void
   selected?: string
   loading: boolean
 }
@@ -22,7 +22,8 @@ export default function ImageUploadInput({
 
   const handleFileSelection = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
-      onSelect(event.target.files?.[0])
+      const file = event.target.files?.[0]
+      file && onSelect(file)
     },
     [onSelect],
   )
