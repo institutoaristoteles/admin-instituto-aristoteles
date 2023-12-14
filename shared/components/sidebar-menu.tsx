@@ -33,12 +33,6 @@ function SidebarMenu() {
           />
         </React.Fragment>
       )}
-
-      <SidebarMenuItem
-        label="Meu perfil"
-        href="/perfil"
-        icon={<i className={PrimeIcons.USER_EDIT} />}
-      />
     </nav>
   )
 }

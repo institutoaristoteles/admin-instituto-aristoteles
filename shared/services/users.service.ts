@@ -9,6 +9,12 @@ export interface SaveUser {
   role: Role
 }
 
+export interface UpdateProfile {
+  name: string
+  email: string
+  avatar?: string
+}
+
 export interface ActivateUserPassword {
   oldPassword: string
   newPassword: string
@@ -41,11 +47,14 @@ export const updateUser = React.cache(
   },
 )
 
-export const updateProfile = React.cache(
-  async (userId: string, data: SaveUser) => {
-    await api.put(`/users/${userId}`, data)
-  },
-)
+export const updateProfile = React.cache(async (data: UpdateProfile) => {
+  await api.put('/users/me', data)
+})
+
+export const getCurrentUser = async () => {
+  const { data } = await api.get<UserProfile>('/users/me')
+  return data
+}
 
 export const activateUser = React.cache(async (data: ActivateUserPassword) => {
   await api.put(`/users/me/activate-user`, data)

@@ -7,7 +7,7 @@ import {
   saveToken,
 } from '@/shared/services/token.service'
 import { decodeJwt } from 'jose'
-import { cache } from 'react'
+import React, { cache } from 'react'
 
 interface LoginData {
   username: string
@@ -40,8 +40,8 @@ export function logout() {
   clearToken()
 }
 
-function mapJwtToUserProfile(jwt: JwtToken): UserProfile {
-  return {
+const mapJwtToUserProfile = React.cache(
+  (jwt: JwtToken): UserProfile => ({
     id: jwt.sub,
     avatar: jwt.picture,
     name: jwt.name,
@@ -49,8 +49,8 @@ function mapJwtToUserProfile(jwt: JwtToken): UserProfile {
     username: jwt.preferred_username,
     role: jwt.role,
     status: jwt.status,
-  }
-}
+  }),
+)
 
 export async function getUser(): Promise<UserProfile | undefined> {
   const accessToken = await getToken(ACCESS_TOKEN_COOKIE)

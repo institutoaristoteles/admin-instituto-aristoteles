@@ -1,38 +1,25 @@
-'use client'
-
 import ImageUploadInput from '@/shared/components/image-upload-input'
-import axios from 'axios'
+import { uploadFile } from '@/shared/services/self'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 
-async function uploadFile(file: File) {
-  const formData = new FormData()
-  formData.set('file', file)
-
-  const response = await axios.post<{ url: string }>(
-    '/api/upload-avatar',
-    formData,
-    {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    },
-  )
-  return response.data.url
+interface AvatarInputProps {
+  onChange: (imageUrl?: string) => void
+  value: string | undefined
 }
 
-export default function AvatarInput() {
-  const [preview, setPreview] = useState<string>()
+export default function AvatarInput({ onChange, value }: AvatarInputProps) {
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (file?: File) => {
     if (!file) {
-      setPreview(undefined)
-      return
+      return onChange(undefined)
     }
 
     try {
       setLoading(true)
       const url = await uploadFile(file)
-      setPreview(url)
+      onChange(url)
     } catch (e) {
       toast.error('Ocorreu um erro ao carregar esta imagem')
     } finally {
@@ -43,7 +30,7 @@ export default function AvatarInput() {
   return (
     <ImageUploadInput
       onSelect={handleSubmit}
-      selected={preview}
+      selected={value}
       loading={loading}
     />
   )

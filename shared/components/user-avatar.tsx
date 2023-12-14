@@ -2,6 +2,7 @@
 
 import { useCurrentUser } from '@/shared/contexts/auth-provider'
 import { logout } from '@/shared/services/auth.service'
+import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import { PrimeIcons } from 'primereact/api'
 import { Avatar } from 'primereact/avatar'
@@ -42,7 +43,12 @@ function UserAvatar() {
       aria-haspopup
       onClick={(event) => menuRef.current?.toggle(event)}
     >
-      <Avatar image={user.avatar} label={user.name[0]} shape="circle" />
+      <Avatar
+        image={user.avatar}
+        label={user.name[0]}
+        shape="circle"
+        className="rounded-full overflow-hidden"
+      />
 
       <span className="text-sm text-text-color hidden md:block">
         {user.name}
@@ -55,6 +61,13 @@ function UserAvatar() {
         popup
         popupAlignment="right"
       />
+
+      <i
+        className={clsx(
+          PrimeIcons.CHEVRON_DOWN,
+          'text-xs text-text-color-secondary',
+        )}
+      ></i>
     </button>
   )
 }
