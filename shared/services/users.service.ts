@@ -41,6 +41,12 @@ export const updateUser = React.cache(
   },
 )
 
+export const updateProfile = React.cache(
+  async (userId: string, data: SaveUser) => {
+    await api.put(`/users/${userId}`, data)
+  },
+)
+
 export const activateUser = React.cache(async (data: ActivateUserPassword) => {
   await api.put(`/users/me/activate-user`, data)
 })
@@ -51,4 +57,9 @@ export const deleteUser = React.cache(async (id: string) => {
 
 export const resetUser = React.cache(async (id: string) => {
   await api.put(`/users/${id}/reset-password`)
+})
+
+export const getUserById = React.cache(async (id: string) => {
+  const { data } = await api.get<UserProfile>(`/users/${id}`)
+  return data
 })

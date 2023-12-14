@@ -1,5 +1,6 @@
 'use client'
 
+import AvatarInput from '@/shared/components/avatar-input'
 import LabeledInput from '@/shared/components/labeled-input'
 import { useCurrentUser } from '@/shared/contexts/auth-provider'
 import clsx from 'clsx'
@@ -17,6 +18,10 @@ export default function UpdateUserInfoForm() {
         <i className={clsx(PrimeIcons.USER, 'text-base')} />
         Informações de Perfil
       </h2>
+
+      <LabeledInput label="Imagem" className="w-auto">
+        <AvatarInput />
+      </LabeledInput>
 
       <LabeledInput label="Nome">
         <InputText value={currentUser.name} />

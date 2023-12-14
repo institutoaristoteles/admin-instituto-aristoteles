@@ -16,11 +16,21 @@ export default function UpdatePasswordForm() {
       </h2>
 
       <LabeledInput label="Senha atual">
-        <Password className="w-full" inputClassName="w-full" />
+        <Password
+          className="w-full"
+          inputClassName="w-full"
+          feedback={false}
+          toggleMask
+        />
       </LabeledInput>
 
       <LabeledInput label="Nova senha">
-        <Password className="w-full" inputClassName="w-full" />
+        <Password
+          className="w-full"
+          inputClassName="w-full"
+          feedback={false}
+          toggleMask
+        />
       </LabeledInput>
 
       <div>
