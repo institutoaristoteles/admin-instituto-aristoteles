@@ -1,14 +1,12 @@
 'use client'
 
-import AvatarField from '@/shared/components/image-upload-input'
-import LabeledInput from '@/shared/components/labeled-input'
+import ImageUploadInput from '@/shared/components/image-upload-input'
 import axios from 'axios'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 
 async function uploadFile(file: File) {
   const formData = new FormData()
-  formData.set('name', file.name)
   formData.set('file', file)
 
   const response = await axios.post<{ url: string }>(
@@ -21,7 +19,7 @@ async function uploadFile(file: File) {
   return response.data.url
 }
 
-export default function UpdateAvatarForm() {
+export default function AvatarInput() {
   const [preview, setPreview] = useState<string>()
   const [loading, setLoading] = useState(false)
 
@@ -43,14 +41,10 @@ export default function UpdateAvatarForm() {
   }
 
   return (
-    <form>
-      <LabeledInput label="Imagem" className="w-auto">
-        <AvatarField
-          onSelect={handleSubmit}
-          selected={preview}
-          loading={loading}
-        />
-      </LabeledInput>
-    </form>
+    <ImageUploadInput
+      onSelect={handleSubmit}
+      selected={preview}
+      loading={loading}
+    />
   )
 }
