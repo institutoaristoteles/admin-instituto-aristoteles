@@ -32,7 +32,7 @@ export default function UpdatePasswordForm() {
   const {
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
     setError,
   } = useForm<UpdatePassword>({
@@ -62,6 +62,8 @@ export default function UpdatePasswordForm() {
 
   const oldPassword = watch('oldPassword')
   const newPassword = watch('newPassword')
+
+  const isDirty = oldPassword.length > 0 || newPassword.length > 0
 
   return (
     <form
@@ -112,6 +114,7 @@ export default function UpdatePasswordForm() {
           size="small"
           type="submit"
           loading={loading}
+          disabled={!isDirty}
         />
       </div>
     </form>

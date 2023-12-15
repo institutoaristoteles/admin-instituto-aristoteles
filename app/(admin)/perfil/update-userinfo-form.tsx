@@ -28,7 +28,7 @@ export default function UpdateUserinfoForm() {
 
   const {
     register,
-    formState: { errors },
+    formState: { errors, isDirty },
     setValue,
     handleSubmit,
     watch,
@@ -105,6 +105,7 @@ export default function UpdateUserinfoForm() {
           icon={PrimeIcons.CHECK}
           size="small"
           loading={loading}
+          disabled={!isDirty}
         />
       </div>
     </form>
