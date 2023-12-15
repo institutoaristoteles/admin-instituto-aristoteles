@@ -5,7 +5,7 @@ import { login, logout } from '@/shared/services/auth.service'
 import {
   activateUser,
   ActivateUserPassword,
-} from '@/shared/services/users.service'
+} from '@/shared/services/profile.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import clsx from 'clsx'

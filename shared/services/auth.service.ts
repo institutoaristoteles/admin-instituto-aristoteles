@@ -1,12 +1,6 @@
 import { Role, UserProfile } from '@/shared/models/user-profile'
 import { api } from '@/shared/services/api'
-import {
-  ACCESS_TOKEN_COOKIE,
-  clearToken,
-  getToken,
-  saveToken,
-} from '@/shared/services/token.service'
-import { decodeJwt } from 'jose'
+import { clearToken, saveToken } from '@/shared/services/token.service'
 import React, { cache } from 'react'
 
 interface LoginData {
@@ -51,11 +45,3 @@ const mapJwtToUserProfile = React.cache(
     status: jwt.status,
   }),
 )
-
-export async function getUser(): Promise<UserProfile | undefined> {
-  const accessToken = await getToken(ACCESS_TOKEN_COOKIE)
-  if (accessToken) {
-    const jwt = decodeJwt(accessToken) as unknown as JwtToken
-    return mapJwtToUserProfile(jwt)
-  }
-}

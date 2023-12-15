@@ -1,12 +1,12 @@
 import ActivateUserForm from '@/app/(auth)/ativar/activate-user-form'
 import logoSvg from '@/shared/images/logo.svg'
-import { getUser } from '@/shared/services/auth.service'
+import { getCurrentUser } from '@/shared/services/profile.service'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
 export default async function ActivateUser() {
-  const user = await getUser()
+  const user = await getCurrentUser()
 
   if (!user) {
     return notFound()

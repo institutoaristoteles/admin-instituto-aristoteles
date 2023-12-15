@@ -9,22 +9,6 @@ export interface SaveUser {
   role: Role
 }
 
-export interface UpdateProfile {
-  name: string
-  email: string
-  avatar?: string
-}
-
-export interface ActivateUserPassword {
-  oldPassword: string
-  newPassword: string
-}
-
-export interface UpdatePassword {
-  oldPassword: string
-  newPassword: string
-}
-
 export type GetUsersFilters = Partial<{
   pageSize: number
   page: number
@@ -42,7 +26,7 @@ export const getUsers = React.cache(
   },
 )
 
-export const saveUser = React.cache(async (data: SaveUser) => {
+export const createUser = React.cache(async (data: SaveUser) => {
   await api.post('/users', data)
 })
 
@@ -52,29 +36,12 @@ export const updateUser = React.cache(
   },
 )
 
-export const updateProfile = React.cache(async (data: UpdateProfile) => {
-  await api.put('/users/me', data)
-})
-
-export const getCurrentUser = async () => {
-  const { data } = await api.get<UserProfile>('/users/me')
-  return data
-}
-
-export const activateUser = React.cache(async (data: ActivateUserPassword) => {
-  await api.put(`/users/me/activate-user`, data)
-})
-
 export const deleteUser = React.cache(async (id: string) => {
   await api.delete(`/users/${id}`)
 })
 
 export const resetUser = React.cache(async (id: string) => {
   await api.put(`/users/${id}/reset-password`)
-})
-
-export const updatePassword = React.cache(async (data: UpdatePassword) => {
-  await api.put('/users/me/update-password', data)
 })
 
 export const getUserById = React.cache(async (id: string) => {

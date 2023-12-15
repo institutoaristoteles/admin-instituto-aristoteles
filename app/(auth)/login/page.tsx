@@ -1,12 +1,12 @@
 import LoginForm from '@/app/(auth)/login/login-form'
 
 import logoSvg from '@/shared/images/logo.svg'
-import { getUser } from '@/shared/services/auth.service'
+import { getCurrentUser } from '@/shared/services/profile.service'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 
 export default async function LoginPage() {
-  const user = await getUser()
+  const user = await getCurrentUser()
 
   if (user) {
     return redirect('/')
