@@ -1,9 +1,9 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
 
-const region = process.env.AWS_REGION_NAME as string
-const accessKeyId = process.env.AWS_ACCESS_KEY as string
-const secretAccessKey = process.env.AWS_SECRET as string
-const bucketName = process.env.AWS_BUCKET as string
+const region = process.env.REGION_AWS as string
+const accessKeyId = process.env.ACCESS_KEY_ID_AWS as string
+const secretAccessKey = process.env.SECRET_KEY_AWS as string
+const bucketName = process.env.BUCKET_KEY_AWS as string
 
 async function uploadToS3(fileData: File) {
   const client = new S3Client({
