@@ -4,7 +4,7 @@ import SuccessUserDialog from '@/app/(admin)/usuarios/novo/success-user-dialog'
 import LabeledInput from '@/shared/components/labeled-input'
 import UserRolesField from '@/shared/components/user-roles-field'
 import { UserRoles } from '@/shared/models/user-profile'
-import { saveUser, SaveUser } from '@/shared/services/users.service'
+import { createUser, SaveUser } from '@/shared/services/users.service'
 import { isConflictError } from '@/shared/utils/errors'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
@@ -73,7 +73,7 @@ export default function UsersForm() {
     async (values: SaveUser) => {
       setLoading(true)
       try {
-        await saveUser(values)
+        await createUser(values)
         setUserCreated(values)
       } catch (e) {
         console.error(e)

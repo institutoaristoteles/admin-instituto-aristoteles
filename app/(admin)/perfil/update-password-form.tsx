@@ -1,7 +1,10 @@
 'use client'
 
 import LabeledInput from '@/shared/components/labeled-input'
-import { updatePassword, UpdatePassword } from '@/shared/services/users.service'
+import {
+  updatePassword,
+  UpdatePassword,
+} from '@/shared/services/profile.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { isAxiosError } from 'axios'
 import clsx from 'clsx'
@@ -13,8 +16,19 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { z } from 'zod'
 
+const updatePasswordSchema = z.object({
+  oldPassword: z.string().min(1, 'Este campo é obrigatório'),
+  newPassword: z.string().min(6, 'A senha deve possuir ao menos 6 caracteres'),
+})
+
+const defaultValues = {
+  oldPassword: '',
+  newPassword: '',
+}
+
 export default function UpdatePasswordForm() {
   const [loading, setLoading] = useState(false)
+
   const {
     setValue,
     watch,
@@ -22,36 +36,29 @@ export default function UpdatePasswordForm() {
     handleSubmit,
     setError,
   } = useForm<UpdatePassword>({
-    defaultValues: {
-      oldPassword: '',
-      newPassword: '',
-    },
-    resolver: zodResolver(
-      z.object({
-        oldPassword: z.string().min(1, 'Este campo é obrigatório'),
-        newPassword: z
-          .string()
-          .min(8, 'A senha deve possuir ao menos 8 caracteres'),
-      }),
-    ),
+    defaultValues,
+    resolver: zodResolver(updatePasswordSchema),
   })
 
-  const onSubmit = useCallback(async (values: UpdatePassword) => {
-    try {
-      setLoading(true)
-      await updatePassword(values)
-      toast.success('Senha atualizada com sucesso!')
-    } catch (e) {
-      console.error(e)
-      if (isAxiosError(e) && e.response?.status === 401) {
-        setError('oldPassword', { message: 'Senha incorreta' })
-      }
+  const onSubmit = useCallback(
+    async (values: UpdatePassword) => {
+      try {
+        setLoading(true)
+        await updatePassword(values)
+        toast.success('Senha atualizada com sucesso!')
+      } catch (e) {
+        console.error(e)
+        if (isAxiosError(e) && e.response?.status === 401) {
+          setError('oldPassword', { message: 'Senha incorreta' })
+        }
 
-      toast.error('Ocorreu um erro ao atualizar a senha')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+        toast.error('Ocorreu um erro ao atualizar a senha')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [setError],
+  )
 
   const oldPassword = watch('oldPassword')
   const newPassword = watch('newPassword')

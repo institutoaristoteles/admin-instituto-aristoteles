@@ -1,5 +1,6 @@
 'use client'
 
+import RoleBadge from '@/shared/components/role-badge'
 import {
   UserProfile,
   UserRoles,
@@ -199,6 +200,7 @@ export default function UsersTable() {
           header="Função"
           bodyClassName="font-bold text-sm whitespace-nowrap"
           field="role"
+          body={(user: UserProfile) => <RoleBadge role={user.role} />}
           editor={roleEditor}
         />
         <Column
