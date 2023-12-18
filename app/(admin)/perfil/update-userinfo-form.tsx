@@ -43,19 +43,22 @@ export default function UpdateUserinfoForm() {
 
   const avatarUrl = watch('avatar')
 
-  const saveUserInfo = useCallback(async (values: UpdateProfile) => {
-    try {
-      setLoading(true)
-      await updateProfile(values)
-      toast.success('Informações atualizadas com sucesso!')
-      router.refresh()
-    } catch (e) {
-      console.error(e)
-      toast.error('Ocorreu um erro ao atualizar as informações')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const saveUserInfo = useCallback(
+    async (values: UpdateProfile) => {
+      try {
+        setLoading(true)
+        await updateProfile(values)
+        toast.success('Informações atualizadas com sucesso!')
+        router.refresh()
+      } catch (e) {
+        console.error(e)
+        toast.error('Ocorreu um erro ao atualizar as informações')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [router],
+  )
 
   return (
     <form
@@ -69,7 +72,11 @@ export default function UpdateUserinfoForm() {
 
       <LabeledInput label="Imagem" className="w-auto">
         <AvatarInput
-          onChange={(imageUrl) => setValue('avatar', imageUrl)}
+          onChange={(imageUrl) =>
+            setValue('avatar', imageUrl, {
+              shouldDirty: true,
+            })
+          }
           value={avatarUrl}
         />
       </LabeledInput>

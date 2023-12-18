@@ -4,6 +4,7 @@ const region = process.env.REGION_AWS as string
 const accessKeyId = process.env.ACCESS_KEY_ID_AWS as string
 const secretAccessKey = process.env.SECRET_KEY_AWS as string
 const bucketName = process.env.BUCKET_KEY_AWS as string
+const basePath = process.env.IMAGES_BASE_PATH as string
 
 async function uploadToS3(fileData: File) {
   const client = new S3Client({
@@ -21,7 +22,7 @@ async function uploadToS3(fileData: File) {
 
   await client.send(putObjectCommand)
 
-  return `https://${bucketName}.s3.${region}.amazonaws.com/${fileData.name}`
+  return `${basePath}/${fileData.name}`
 }
 
 export async function POST(request: Request) {
