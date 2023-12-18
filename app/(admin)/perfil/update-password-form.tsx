@@ -32,7 +32,7 @@ export default function UpdatePasswordForm() {
   const {
     setValue,
     watch,
-    formState: { errors, isValid },
+    formState: { errors },
     handleSubmit,
     setError,
   } = useForm<UpdatePassword>({
