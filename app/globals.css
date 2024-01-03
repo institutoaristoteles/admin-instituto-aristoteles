@@ -115,13 +115,3 @@ body, .p-component {
 .p-panel .p-panel-content {
     @apply p-3 bg-surface-b;
 }
-
-[contenteditable] {
-    @apply block border border-surface-border rounded p-3;
-    min-height: 960px;
-    cursor: text;
-}
-
-[contenteditable]:focus-visible {
-    outline: none;
-}
