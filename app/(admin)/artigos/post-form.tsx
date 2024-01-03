@@ -1,39 +1,35 @@
 'use client'
 
+import CategoriesSelector from '@/shared/components/categories-selector'
 import LabeledInput from '@/shared/components/labeled-input'
-import RichTextEditor from '@/shared/components/rich-text-editor'
+import TextEditor from '@/shared/components/text-editor'
 import Link from 'next/link'
 import { Button } from 'primereact/button'
-import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
+import React from 'react'
 
 export default function PostForm() {
-  const categoryOptions = [
-    { label: 'Categoria 1', value: 1 },
-    { label: 'Categoria 2', value: 2 },
-    { label: 'Categoria 3', value: 3 },
-    { label: 'Categoria 4', value: 4 },
-  ]
-
   return (
-    <form
-      className="flex flex-col gap-5"
-      onSubmit={(ev) => ev.preventDefault()}
-    >
+    <form className="flex flex-col gap-5 items-start">
       <LabeledInput label="Título">
         <InputText />
       </LabeledInput>
 
-      {/* <LabeledInput label="Descrição">
-        <InputTextarea />
-      </LabeledInput> */}
+      <div className="flex flex-col gap-1 w-full">
+        <label htmlFor="editor" className="text-sm font-bold">
+          Conteúdo
+        </label>
 
-      <LabeledInput label="Conteúdo">
-        <RichTextEditor />
+        <TextEditor />
+      </div>
+
+      <LabeledInput label="Descrição">
+        <InputTextarea className="min-h-[150px]" />
       </LabeledInput>
 
       <LabeledInput label="Categoria">
-        <Dropdown options={categoryOptions} />
+        <CategoriesSelector />
       </LabeledInput>
 
       <div className="flex items-center gap-2">
