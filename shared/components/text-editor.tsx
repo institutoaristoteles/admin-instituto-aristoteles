@@ -1,7 +1,12 @@
+import LabeledInput from '@/shared/components/labeled-input'
 import { Level } from '@tiptap/extension-heading'
+import { Link } from '@tiptap/extension-link'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
-import React from 'react'
+import { Button } from 'primereact/button'
+import { InputText } from 'primereact/inputtext'
+import { OverlayPanel } from 'primereact/overlaypanel'
+import React, { FormEvent, useCallback, useRef, useState } from 'react'
 import {
   FaBold,
   FaItalic,
@@ -9,6 +14,61 @@ import {
   FaListUl,
   FaQuoteLeft,
 } from 'react-icons/fa'
+import { RiLinkM, RiLinkUnlinkM } from 'react-icons/ri'
+
+export function LinkButton({ editor }: { editor: Editor }) {
+  const op = useRef<OverlayPanel>(null)
+  const [url, setUrl] = useState('')
+
+  const setLink = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault()
+
+      if (!url) editor.chain().focus().unsetLink().run()
+
+      editor.chain().focus().setLink({ href: url }).run()
+    },
+    [editor, url],
+  )
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={(e) => op.current?.toggle(e)}
+        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+      >
+        <RiLinkM />
+      </button>
+
+      {editor.getAttributes('link').href && (
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().unsetLink().run()}
+          className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+        >
+          <RiLinkUnlinkM />
+        </button>
+      )}
+
+      <OverlayPanel
+        ref={op}
+        onHide={() => setUrl('')}
+        onShow={() => setUrl(editor.getAttributes('link').href)}
+      >
+        <form className="flex flex-col gap-5" onSubmit={setLink}>
+          <LabeledInput label="URL">
+            <InputText value={url} onChange={(ev) => setUrl(ev.target.value)} />
+          </LabeledInput>
+
+          <div className="flex items-center justify-start">
+            <Button label="Confirmar" />
+          </div>
+        </form>
+      </OverlayPanel>
+    </>
+  )
+}
 
 export function Toolbar({ editor }: { editor: Editor | null }) {
   if (!editor) {
@@ -32,6 +92,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
         <option value={2}>Subtítulo</option>
         <option value={3}>Intertítulo</option>
       </select>
+
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBold().run()}
@@ -43,7 +104,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleItalic().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay "
+        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
       >
         <FaItalic />
       </button>
@@ -51,7 +112,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay "
+        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
       >
         <FaListUl />
       </button>
@@ -59,7 +120,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay "
+        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
       >
         <FaListOl />
       </button>
@@ -67,17 +128,26 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay "
+        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
       >
         <FaQuoteLeft />
       </button>
+
+      <LinkButton editor={editor} />
     </div>
   )
 }
 
 export default function TextEditor() {
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Link.configure({
+        autolink: true,
+        linkOnPaste: true,
+        openOnClick: false,
+      }),
+    ],
     autofocus: null,
     editorProps: {
       attributes: {
