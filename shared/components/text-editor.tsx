@@ -1,20 +1,79 @@
 import LabeledInput from '@/shared/components/labeled-input'
+import { uploadFile } from '@/shared/services/self'
 import { Level } from '@tiptap/extension-heading'
+import { Image } from '@tiptap/extension-image'
 import { Link } from '@tiptap/extension-link'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
+import clsx from 'clsx'
+import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { OverlayPanel } from 'primereact/overlaypanel'
-import React, { FormEvent, useCallback, useRef, useState } from 'react'
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useRef,
+  useState,
+} from 'react'
 import {
   FaBold,
+  FaImage,
   FaItalic,
   FaListOl,
   FaListUl,
   FaQuoteLeft,
 } from 'react-icons/fa'
 import { RiLinkM, RiLinkUnlinkM } from 'react-icons/ri'
+
+export function ImageLink({ editor }: { editor: Editor }) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleImageSelection = useCallback(
+    async (ev: ChangeEvent<HTMLInputElement>) => {
+      const file = ev.target.files?.[0]
+      if (!file || !inputRef.current) return
+
+      try {
+        setLoading(true)
+        const url = await uploadFile(file)
+        editor.chain().focus().setImage({ src: url }).run()
+        inputRef.current.value = ''
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [editor],
+  )
+
+  return (
+    <>
+      <input
+        type="file"
+        className="hidden"
+        ref={inputRef}
+        onChange={handleImageSelection}
+        accept="image/*"
+      />
+
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+      >
+        {loading ? (
+          <i className={`${PrimeIcons.SPINNER} pi-spin`}></i>
+        ) : (
+          <FaImage />
+        )}
+      </button>
+    </>
+  )
+}
 
 export function LinkButton({ editor }: { editor: Editor }) {
   const op = useRef<OverlayPanel>(null)
@@ -36,12 +95,17 @@ export function LinkButton({ editor }: { editor: Editor }) {
       <button
         type="button"
         onClick={(e) => op.current?.toggle(e)}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+        className={clsx(
+          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
+          {
+            'bg-surface-d': editor?.isActive('link'),
+          },
+        )}
       >
         <RiLinkM />
       </button>
 
-      {editor.getAttributes('link').href && (
+      {editor?.isActive('link') && (
         <button
           type="button"
           onClick={() => editor.chain().focus().unsetLink().run()}
@@ -96,7 +160,12 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBold().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+        className={clsx(
+          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
+          {
+            'bg-surface-d': editor?.isActive('bold'),
+          },
+        )}
       >
         <FaBold />
       </button>
@@ -104,7 +173,12 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleItalic().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+        className={clsx(
+          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
+          {
+            'bg-surface-d': editor?.isActive('italic'),
+          },
+        )}
       >
         <FaItalic />
       </button>
@@ -112,7 +186,12 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+        className={clsx(
+          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
+          {
+            'bg-surface-d': editor?.isActive('bulletList'),
+          },
+        )}
       >
         <FaListUl />
       </button>
@@ -120,7 +199,12 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+        className={clsx(
+          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
+          {
+            'bg-surface-d': editor?.isActive('orderedList'),
+          },
+        )}
       >
         <FaListOl />
       </button>
@@ -128,12 +212,19 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       <button
         type="button"
         onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-        className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
+        className={clsx(
+          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
+          {
+            'bg-surface-d': editor?.isActive('blockquote'),
+          },
+        )}
       >
         <FaQuoteLeft />
       </button>
 
       <LinkButton editor={editor} />
+
+      <ImageLink editor={editor} />
     </div>
   )
 }
@@ -147,6 +238,7 @@ export default function TextEditor() {
         linkOnPaste: true,
         openOnClick: false,
       }),
+      Image,
     ],
     autofocus: null,
     editorProps: {
@@ -162,7 +254,7 @@ export default function TextEditor() {
 
       <EditorContent
         editor={editor}
-        className="rounded p-3 border border-surface-border"
+        className="rounded p-3 border border-surface-border prose prose-invert prose-p:m-0 prose-headings:m-0 min-w-full"
       />
 
       <div>
