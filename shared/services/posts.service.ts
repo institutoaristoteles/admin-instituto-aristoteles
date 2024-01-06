@@ -28,5 +28,5 @@ export async function getPosts(filters: GetPostsFilters = defaultFilters) {
 }
 
 export async function savePost(data: SavePost) {
-  await api.post('/posts', data)
+  await api.post('/posts', { ...data, status: 'draft' as PostStatus })
 }
