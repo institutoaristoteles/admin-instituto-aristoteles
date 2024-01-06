@@ -4,19 +4,29 @@ import AvatarInput from '@/shared/components/avatar-input'
 import CategoriesSelector from '@/shared/components/categories-selector'
 import LabeledInput from '@/shared/components/labeled-input'
 import TextEditor from '@/shared/components/text-editor'
-import { SavePost } from '@/shared/services/posts.service'
+import { savePost, SavePost } from '@/shared/services/posts.service'
 import Link from 'next/link'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 export default function PostForm() {
+  const [loading, setLoading] = useState(false)
   const { handleSubmit, register, watch, setValue } = useForm<SavePost>()
 
   const onSubmit = useCallback(async (values: SavePost) => {
-    console.log(values)
+    try {
+      setLoading(true)
+      await savePost(values)
+      toast.success('Post salvo')
+    } catch (e) {
+      toast.error('Ocorreu um erro ao salvar este post')
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   const coverUrl = watch('coverUrl')
@@ -68,7 +78,7 @@ export default function PostForm() {
       </LabeledInput>
 
       <div className="flex items-center gap-2">
-        <Button label="Salvar artigo" type="submit" />
+        <Button label="Salvar artigo" type="submit" loading={loading} />
         <Link href="/artigos">
           <Button label="Cancelar" outlined type="button" />
         </Link>
