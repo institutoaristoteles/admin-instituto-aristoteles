@@ -4,32 +4,45 @@ import AvatarInput from '@/shared/components/avatar-input'
 import CategoriesSelector from '@/shared/components/categories-selector'
 import LabeledInput from '@/shared/components/labeled-input'
 import TextEditor from '@/shared/components/text-editor'
+import { SavePost } from '@/shared/services/posts.service'
 import Link from 'next/link'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
-import React, { useState } from 'react'
+import React, { useCallback } from 'react'
+import { useForm } from 'react-hook-form'
 
 export default function PostForm() {
-  const [img, setImg] = useState('')
+  const { handleSubmit, register, watch, setValue } = useForm<SavePost>()
+
+  const onSubmit = useCallback(async (values: SavePost) => {
+    console.log(values)
+  }, [])
+
+  const coverUrl = watch('coverUrl')
+  const categoryId = watch('categoryId')
+  const content = watch('content')
 
   return (
-    <form className="flex flex-col gap-5 items-start">
+    <form
+      className="flex flex-col gap-5 items-start"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="flex flex-col gap-1 w-full">
-        <label htmlFor="editor" className="text-sm font-bold">
+        <label htmlFor="coverUrl" className="text-sm font-bold">
           Capa
         </label>
 
         <AvatarInput
           onChange={function (imageUrl?: string | undefined): void {
-            setImg(imageUrl ?? '')
+            setValue('coverUrl', imageUrl)
           }}
-          value={img}
+          value={coverUrl}
         />
       </div>
 
       <LabeledInput label="Título">
-        <InputText />
+        <InputText {...register('title')} />
       </LabeledInput>
 
       <div className="flex flex-col gap-1 w-full">
@@ -37,15 +50,21 @@ export default function PostForm() {
           Conteúdo
         </label>
 
-        <TextEditor />
+        <TextEditor
+          value={content}
+          onChange={(value) => setValue('content', value)}
+        />
       </div>
 
       <LabeledInput label="Descrição">
-        <InputTextarea className="min-h-[150px]" />
+        <InputTextarea {...register('description')} className="min-h-[150px]" />
       </LabeledInput>
 
       <LabeledInput label="Categoria">
-        <CategoriesSelector />
+        <CategoriesSelector
+          value={categoryId}
+          onChange={(event) => setValue('categoryId', event.value)}
+        />
       </LabeledInput>
 
       <div className="flex items-center gap-2">

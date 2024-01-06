@@ -1,6 +1,5 @@
 import LabeledInput from '@/shared/components/labeled-input'
 import { uploadFile } from '@/shared/services/self'
-import { Level } from '@tiptap/extension-heading'
 import { Image } from '@tiptap/extension-image'
 import { Link } from '@tiptap/extension-link'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
@@ -25,6 +24,7 @@ import {
   FaListUl,
   FaQuoteLeft,
 } from 'react-icons/fa'
+import { LuHeading1, LuHeading2, LuHeading3 } from 'react-icons/lu'
 import { RiLinkM, RiLinkUnlinkM } from 'react-icons/ri'
 
 export function ImageLink({ editor }: { editor: Editor }) {
@@ -60,8 +60,7 @@ export function ImageLink({ editor }: { editor: Editor }) {
         accept="image/*"
       />
 
-      <button
-        type="button"
+      <ActionButton
         onClick={() => inputRef.current?.click()}
         className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
       >
@@ -70,7 +69,7 @@ export function ImageLink({ editor }: { editor: Editor }) {
         ) : (
           <FaImage />
         )}
-      </button>
+      </ActionButton>
     </>
   )
 }
@@ -86,33 +85,27 @@ export function LinkButton({ editor }: { editor: Editor }) {
       if (!url) editor.chain().focus().unsetLink().run()
 
       editor.chain().focus().setLink({ href: url }).run()
+      op.current?.hide()
     },
     [editor, url],
   )
 
   return (
     <>
-      <button
-        type="button"
+      <ActionButton
+        active={editor?.isActive('link')}
         onClick={(e) => op.current?.toggle(e)}
-        className={clsx(
-          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
-          {
-            'bg-surface-d': editor?.isActive('link'),
-          },
-        )}
       >
         <RiLinkM />
-      </button>
+      </ActionButton>
 
       {editor?.isActive('link') && (
-        <button
-          type="button"
+        <ActionButton
           onClick={() => editor.chain().focus().unsetLink().run()}
           className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
         >
           <RiLinkUnlinkM />
-        </button>
+        </ActionButton>
       )}
 
       <OverlayPanel
@@ -134,6 +127,28 @@ export function LinkButton({ editor }: { editor: Editor }) {
   )
 }
 
+export function ActionButton({
+  active = false,
+  ...props
+}: React.HTMLProps<HTMLButtonElement> & { active?: boolean }) {
+  return (
+    <button
+      {...props}
+      type="button"
+      className={clsx(
+        'border border-surface-border p-2 rounded text-xl',
+        {
+          'bg-primary border-primary text-primary-color-text': active,
+          'bg-surface-overlay': !active,
+        },
+        props.className,
+      )}
+    >
+      {props.children}
+    </button>
+  )
+}
+
 export function Toolbar({ editor }: { editor: Editor | null }) {
   if (!editor) {
     return <></>
@@ -141,86 +156,67 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
 
   return (
     <div className="flex gap-1 items-center mb-2">
-      <select
-        className="border border-surface-border p-2 rounded bg-surface-overlay min-w-[50px]"
-        onChange={(event) => {
-          console.log(event.target.value)
-          editor
-            ?.chain()
-            .focus()
-            .setHeading({ level: parseInt(event.target.value, 10) as Level })
-            .run()
+      <ActionButton
+        onClick={() => {
+          editor?.chain().focus().toggleHeading({ level: 1 }).run()
+        }}
+        active={editor?.isActive('heading', { level: 1 })}
+      >
+        <LuHeading1 />
+      </ActionButton>
+
+      <ActionButton
+        active={editor?.isActive('heading', { level: 2 })}
+        onClick={() =>
+          editor?.chain().focus().toggleHeading({ level: 2 }).run()
+        }
+      >
+        <LuHeading2 />
+      </ActionButton>
+
+      <ActionButton
+        active={editor?.isActive('heading', { level: 3 })}
+        onClick={() => {
+          editor?.chain().focus().toggleHeading({ level: 3 }).run()
         }}
       >
-        <option value={1}>Título</option>
-        <option value={2}>Subtítulo</option>
-        <option value={3}>Intertítulo</option>
-      </select>
+        <LuHeading3 />
+      </ActionButton>
 
-      <button
-        type="button"
+      <ActionButton
+        active={editor?.isActive('bold')}
         onClick={() => editor?.chain().focus().toggleBold().run()}
-        className={clsx(
-          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
-          {
-            'bg-surface-d': editor?.isActive('bold'),
-          },
-        )}
       >
         <FaBold />
-      </button>
+      </ActionButton>
 
-      <button
-        type="button"
+      <ActionButton
+        active={editor?.isActive('italic')}
         onClick={() => editor?.chain().focus().toggleItalic().run()}
-        className={clsx(
-          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
-          {
-            'bg-surface-d': editor?.isActive('italic'),
-          },
-        )}
       >
         <FaItalic />
-      </button>
+      </ActionButton>
 
-      <button
-        type="button"
+      <ActionButton
+        active={editor?.isActive('bulletList')}
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
-        className={clsx(
-          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
-          {
-            'bg-surface-d': editor?.isActive('bulletList'),
-          },
-        )}
       >
         <FaListUl />
-      </button>
+      </ActionButton>
 
-      <button
-        type="button"
+      <ActionButton
+        active={editor?.isActive('orderedList')}
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-        className={clsx(
-          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
-          {
-            'bg-surface-d': editor?.isActive('orderedList'),
-          },
-        )}
       >
         <FaListOl />
-      </button>
+      </ActionButton>
 
-      <button
-        type="button"
+      <ActionButton
+        active={editor?.isActive('blockquote')}
         onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-        className={clsx(
-          'border border-surface-border p-2 rounded text-xl bg-surface-overlay',
-          {
-            'bg-surface-d': editor?.isActive('blockquote'),
-          },
-        )}
       >
         <FaQuoteLeft />
-      </button>
+      </ActionButton>
 
       <LinkButton editor={editor} />
 
@@ -229,7 +225,12 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
   )
 }
 
-export default function TextEditor() {
+interface TextEditorProps {
+  value: string
+  onChange: (value: string) => void
+}
+
+export default function TextEditor({ value, onChange }: TextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -246,6 +247,10 @@ export default function TextEditor() {
         class: 'focus-visible:outline-none h-[400px] overflow-auto',
       },
     },
+    content: value,
+    onUpdate: (props) => {
+      onChange(props.editor.getHTML())
+    },
   })
 
   return (
@@ -256,10 +261,6 @@ export default function TextEditor() {
         editor={editor}
         className="rounded p-3 border border-surface-border prose prose-invert prose-p:m-0 prose-headings:m-0 min-w-full"
       />
-
-      <div>
-        <pre>{editor?.getHTML()}</pre>
-      </div>
     </>
   )
 }
