@@ -13,6 +13,12 @@
     .center {
         @apply flex items-center justify-center;
     }
+
+    .bg-dotted {
+        background-image: radial-gradient( circle at center, var(--surface-border) 0.05rem, transparent 0 );
+        background-size: 1rem 1rem;
+        background-position: 0 0, 0.65rem 0.65rem;
+    }
 }
 
 html,

@@ -3,7 +3,7 @@ import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import React, { useCallback, useMemo, useRef } from 'react'
 
-interface AvatarFieldProps {
+interface ImageUploadInputProps {
   onSelect: (file?: File) => void
   selected?: string
   loading: boolean
@@ -13,7 +13,7 @@ export default function ImageUploadInput({
   selected,
   onSelect,
   loading,
-}: AvatarFieldProps) {
+}: ImageUploadInputProps) {
   const fileInput = useRef<HTMLInputElement>(null)
 
   const handleClick = useCallback(() => {
