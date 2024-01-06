@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import React, { useCallback, useMemo, useRef } from 'react'
@@ -91,12 +90,11 @@ export default function ImageUploadInput({
       />
 
       {selected && (
-        <Image
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
           src={selected}
-          width={120}
-          height={120}
           alt=""
-          className="rounded-2xl aspect-square object-cover shadow"
+          className="rounded-2xl aspect-square object-cover shadow w-[120px] h-[120px]"
         />
       )}
 
