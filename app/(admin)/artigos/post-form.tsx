@@ -5,6 +5,8 @@ import CategoriesSelector from '@/shared/components/categories-selector'
 import LabeledInput from '@/shared/components/labeled-input'
 import TextEditor from '@/shared/components/text-editor'
 import { savePost, SavePost } from '@/shared/services/posts.service'
+import { zodResolver } from '@hookform/resolvers/zod'
+import clsx from 'clsx'
 import Link from 'next/link'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
@@ -12,10 +14,35 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import React, { useCallback, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { z } from 'zod'
+
+const schemaValidator = z.object({
+  title: z
+    .string({ required_error: 'Campo obrigatório' })
+    .min(1, 'Campo obrigatório'),
+  content: z
+    .string({ required_error: 'Campo obrigatório' })
+    .min(1, 'Campo obrigatório'),
+  coverUrl: z.string().url().optional(),
+  description: z
+    .string({ required_error: 'Campo obrigatório' })
+    .min(1, 'Campo obrigatório'),
+  categoryId: z.string({
+    required_error: 'É necessário selecionar uma categoria',
+  }),
+})
 
 export default function PostForm() {
   const [loading, setLoading] = useState(false)
-  const { handleSubmit, register, watch, setValue } = useForm<SavePost>()
+  const {
+    handleSubmit,
+    register,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<SavePost>({
+    resolver: zodResolver(schemaValidator),
+  })
 
   const onSubmit = useCallback(async (values: SavePost) => {
     try {
@@ -52,7 +79,17 @@ export default function PostForm() {
       </div>
 
       <LabeledInput label="Título">
-        <InputText {...register('title')} />
+        <InputText
+          {...register('title')}
+          className={clsx({ 'p-invalid': errors.title })}
+          autoFocus
+        />
+
+        {errors.title && (
+          <span className="text-[#ff7b7b] font-normal">
+            {errors.title.message}
+          </span>
+        )}
       </LabeledInput>
 
       <div className="flex flex-col gap-1 w-full">
@@ -62,19 +99,43 @@ export default function PostForm() {
 
         <TextEditor
           value={content}
+          id="editor"
           onChange={(value) => setValue('content', value)}
+          invalid={!!errors.content}
         />
+
+        {errors.content && (
+          <span className="text-[#ff7b7b] font-normal">
+            {errors.content.message}
+          </span>
+        )}
       </div>
 
       <LabeledInput label="Descrição">
-        <InputTextarea {...register('description')} className="min-h-[150px]" />
+        <InputTextarea
+          {...register('description')}
+          className={clsx('min-h-[150px]', { 'p-invalid': errors.description })}
+        />
+
+        {errors.description && (
+          <span className="text-[#ff7b7b] font-normal">
+            {errors.description.message}
+          </span>
+        )}
       </LabeledInput>
 
       <LabeledInput label="Categoria">
         <CategoriesSelector
           value={categoryId}
           onChange={(event) => setValue('categoryId', event.value)}
+          className={clsx({ 'p-invalid': errors.categoryId })}
         />
+
+        {errors.categoryId && (
+          <span className="text-[#ff7b7b] font-normal">
+            {errors.categoryId.message}
+          </span>
+        )}
       </LabeledInput>
 
       <div className="flex items-center gap-2">
