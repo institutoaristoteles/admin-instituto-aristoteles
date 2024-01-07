@@ -1,11 +1,12 @@
 import { Category } from '@/shared/models/category'
-import { UserProfile } from '@/shared/models/user-profile'
 import { PostStatus } from '@/shared/models/post-status'
+import { UserProfile } from '@/shared/models/user-profile'
 
 export interface Post {
   id: string
   title: string
   slug: string
+  coverUrl?: string
   description: string
   content: string
   status: PostStatus
