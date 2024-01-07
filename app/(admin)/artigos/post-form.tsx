@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
@@ -163,9 +164,19 @@ export default function PostForm({ post }: { post?: Post }) {
       </LabeledInput>
 
       <div className="flex items-center gap-2">
-        <Button label="Salvar artigo" type="submit" loading={loading} />
+        <Button
+          label="Salvar artigo"
+          type="submit"
+          loading={loading}
+          icon={PrimeIcons.SAVE}
+        />
         <Link href="/artigos">
-          <Button label="Cancelar" outlined type="button" />
+          <Button
+            label="Cancelar"
+            outlined
+            type="button"
+            icon={PrimeIcons.CHEVRON_LEFT}
+          />
         </Link>
       </div>
     </form>
