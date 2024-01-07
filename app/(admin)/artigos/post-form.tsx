@@ -4,10 +4,13 @@ import AvatarInput from '@/shared/components/avatar-input'
 import CategoriesSelector from '@/shared/components/categories-selector'
 import LabeledInput from '@/shared/components/labeled-input'
 import TextEditor from '@/shared/components/text-editor'
+import { Post } from '@/shared/models/post'
+import { PostStatuses } from '@/shared/models/post-status'
 import { savePost, SavePost } from '@/shared/services/posts.service'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
@@ -30,9 +33,11 @@ const schemaValidator = z.object({
   categoryId: z.string({
     required_error: 'É necessário selecionar uma categoria',
   }),
+  status: z.enum(PostStatuses),
 })
 
-export default function PostForm() {
+export default function PostForm({ post }: { post?: Post }) {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const {
     handleSubmit,
@@ -41,30 +46,49 @@ export default function PostForm() {
     setValue,
     formState: { errors },
   } = useForm<SavePost>({
+    defaultValues: post && {
+      title: post.title,
+      content: post.content,
+      description: post.description,
+      categoryId: post.category?.id,
+      coverUrl: post.coverUrl,
+      status: post.status,
+    },
     resolver: zodResolver(schemaValidator),
   })
 
-  const onSubmit = useCallback(async (values: SavePost) => {
-    try {
-      setLoading(true)
-      await savePost(values)
-      toast.success('Post salvo')
-    } catch (e) {
-      toast.error('Ocorreu um erro ao salvar este post')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const onSubmit = useCallback(
+    async (values: SavePost) => {
+      try {
+        setLoading(true)
+        await savePost(values, post?.id)
+        toast.success('Post salvo')
 
-  const coverUrl = watch('coverUrl')
-  const categoryId = watch('categoryId')
-  const content = watch('content')
+        if (!post) {
+          return router.push('/artigos')
+        }
+
+        router.refresh()
+      } catch (e) {
+        toast.error('Ocorreu um erro ao salvar este post')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [post, router],
+  )
 
   return (
     <form
       className="flex flex-col gap-5 items-start"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <input
+        type="hidden"
+        {...register('status')}
+        value={post?.status || 'draft'}
+      />
+
       <div className="flex flex-col gap-1 w-full">
         <label htmlFor="coverUrl" className="text-sm font-bold">
           Capa
@@ -74,7 +98,7 @@ export default function PostForm() {
           onChange={function (imageUrl?: string | undefined): void {
             setValue('coverUrl', imageUrl)
           }}
-          value={coverUrl}
+          value={watch('coverUrl')}
         />
       </div>
 
@@ -98,7 +122,7 @@ export default function PostForm() {
         </label>
 
         <TextEditor
-          value={content}
+          value={watch('content')}
           id="editor"
           onChange={(value) => setValue('content', value)}
           invalid={!!errors.content}
@@ -126,7 +150,7 @@ export default function PostForm() {
 
       <LabeledInput label="Categoria">
         <CategoriesSelector
-          value={categoryId}
+          value={watch('categoryId')}
           onChange={(event) => setValue('categoryId', event.value)}
           className={clsx({ 'p-invalid': errors.categoryId })}
         />
