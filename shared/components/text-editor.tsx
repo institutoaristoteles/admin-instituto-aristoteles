@@ -227,10 +227,17 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
 
 interface TextEditorProps {
   value: string
+  id: string
   onChange: (value: string) => void
+  invalid?: boolean
 }
 
-export default function TextEditor({ value, onChange }: TextEditorProps) {
+export default function TextEditor({
+  value,
+  onChange,
+  id,
+  invalid = false,
+}: TextEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -241,9 +248,10 @@ export default function TextEditor({ value, onChange }: TextEditorProps) {
       }),
       Image,
     ],
-    autofocus: null,
+    autofocus: false,
     editorProps: {
       attributes: {
+        id,
         class: 'focus-visible:outline-none h-[400px] overflow-auto',
       },
     },
@@ -259,7 +267,12 @@ export default function TextEditor({ value, onChange }: TextEditorProps) {
 
       <EditorContent
         editor={editor}
-        className="rounded p-3 border border-surface-border prose prose-invert prose-p:m-0 prose-headings:m-0 min-w-full"
+        className={clsx(
+          'rounded p-3 border border-surface-border prose prose-invert prose-p:m-0 prose-headings:m-0 min-w-full',
+          {
+            'border-[var(--red-300)]': invalid,
+          },
+        )}
       />
     </>
   )
