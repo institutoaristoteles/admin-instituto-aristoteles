@@ -1,9 +1,9 @@
-import Link from 'next/link'
-import React, { ReactNode, useCallback, useState } from 'react'
 import { useSidebar } from '@/shared/contexts/sidebar-provider'
-import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { PrimeIcons } from 'primereact/api'
+import React, { ReactNode, useCallback, useState } from 'react'
 
 interface MenuItemProps {
   label: string
@@ -41,7 +41,7 @@ export default function SidebarMenuItem({
       <Link
         href={href ?? ''}
         className={clsx(
-          'flex items-center gap-3 p-2 rounded-xl w-full font-bold text-sm transition-all hover:bg-surface-d group',
+          'flex items-center gap-3 p-2 rounded-xl w-full font-bold text-sm transition-all hover:bg-gradient group',
           {
             'bg-surface-b': pathname === href,
           },

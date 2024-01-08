@@ -9,6 +9,7 @@ import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { OverlayPanel } from 'primereact/overlaypanel'
+import { Tooltip } from 'primereact/tooltip'
 import React, {
   ChangeEvent,
   FormEvent,
@@ -39,7 +40,12 @@ export function ImageLink({ editor }: { editor: Editor }) {
       try {
         setLoading(true)
         const url = await uploadFile(file)
-        editor.chain().focus().setImage({ src: url }).run()
+        editor
+          .chain()
+          .focus()
+          .setImage({ src: url })
+          .createParagraphNear()
+          .run()
         inputRef.current.value = ''
       } catch (e) {
         console.error(e)
@@ -61,6 +67,7 @@ export function ImageLink({ editor }: { editor: Editor }) {
       />
 
       <ActionButton
+        tooltip="Imagem"
         onClick={() => inputRef.current?.click()}
         className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
       >
@@ -93,6 +100,7 @@ export function LinkButton({ editor }: { editor: Editor }) {
   return (
     <>
       <ActionButton
+        tooltip="Link"
         active={editor?.isActive('link')}
         onClick={(e) => op.current?.toggle(e)}
       >
@@ -101,6 +109,7 @@ export function LinkButton({ editor }: { editor: Editor }) {
 
       {editor?.isActive('link') && (
         <ActionButton
+          tooltip="Desvincular link"
           onClick={() => editor.chain().focus().unsetLink().run()}
           className="border border-surface-border p-2 rounded text-xl bg-surface-overlay"
         >
@@ -129,23 +138,30 @@ export function LinkButton({ editor }: { editor: Editor }) {
 
 export function ActionButton({
   active = false,
+  tooltip,
   ...props
-}: React.HTMLProps<HTMLButtonElement> & { active?: boolean }) {
+}: React.HTMLProps<HTMLButtonElement> & { active?: boolean; tooltip: string }) {
+  const ref = useRef<HTMLButtonElement>(null)
+
   return (
-    <button
-      {...props}
-      type="button"
-      className={clsx(
-        'border border-surface-border p-2 rounded text-xl',
-        {
-          'bg-primary border-primary text-primary-color-text': active,
-          'bg-surface-overlay': !active,
-        },
-        props.className,
-      )}
-    >
-      {props.children}
-    </button>
+    <>
+      <Tooltip content={tooltip} target={ref} position="bottom" />
+      <button
+        {...props}
+        ref={ref}
+        type="button"
+        className={clsx(
+          'border border-surface-border p-2 rounded text-xl hover:border-primary',
+          {
+            'bg-primary border-primary text-primary-color-text': active,
+            'bg-surface-overlay': !active,
+          },
+          props.className,
+        )}
+      >
+        {props.children}
+      </button>
+    </>
   )
 }
 
@@ -155,8 +171,9 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
   }
 
   return (
-    <div className="flex gap-1 items-center mb-2">
+    <div className="flex flex-wrap gap-1 items-center mb-2">
       <ActionButton
+        tooltip="Título 1"
         onClick={() => {
           editor?.chain().focus().toggleHeading({ level: 1 }).run()
         }}
@@ -166,6 +183,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </ActionButton>
 
       <ActionButton
+        tooltip="Título 2"
         active={editor?.isActive('heading', { level: 2 })}
         onClick={() =>
           editor?.chain().focus().toggleHeading({ level: 2 }).run()
@@ -175,6 +193,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </ActionButton>
 
       <ActionButton
+        tooltip="Título 3"
         active={editor?.isActive('heading', { level: 3 })}
         onClick={() => {
           editor?.chain().focus().toggleHeading({ level: 3 }).run()
@@ -184,6 +203,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </ActionButton>
 
       <ActionButton
+        tooltip="Negrito"
         active={editor?.isActive('bold')}
         onClick={() => editor?.chain().focus().toggleBold().run()}
       >
@@ -191,6 +211,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </ActionButton>
 
       <ActionButton
+        tooltip="Itálico"
         active={editor?.isActive('italic')}
         onClick={() => editor?.chain().focus().toggleItalic().run()}
       >
@@ -198,6 +219,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </ActionButton>
 
       <ActionButton
+        tooltip="Lista"
         active={editor?.isActive('bulletList')}
         onClick={() => editor?.chain().focus().toggleBulletList().run()}
       >
@@ -205,6 +227,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </ActionButton>
 
       <ActionButton
+        tooltip="Lista ordenada"
         active={editor?.isActive('orderedList')}
         onClick={() => editor?.chain().focus().toggleOrderedList().run()}
       >
@@ -212,6 +235,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </ActionButton>
 
       <ActionButton
+        tooltip="Citação"
         active={editor?.isActive('blockquote')}
         onClick={() => editor?.chain().focus().toggleBlockquote().run()}
       >
