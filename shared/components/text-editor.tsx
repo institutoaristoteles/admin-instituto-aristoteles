@@ -268,7 +268,7 @@ export default function TextEditor({
       <EditorContent
         editor={editor}
         className={clsx(
-          'rounded p-3 border border-surface-border prose prose-invert prose-p:m-0 prose-headings:m-0 min-w-full',
+          'rounded p-3 border border-surface-border prose prose-invert prose-p:m-0 prose-headings:m-0 min-w-full bg-surface-b',
           {
             'border-[var(--red-300)]': invalid,
           },
