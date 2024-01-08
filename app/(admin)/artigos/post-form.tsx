@@ -3,10 +3,12 @@
 import AvatarInput from '@/shared/components/avatar-input'
 import CategoriesSelector from '@/shared/components/categories-selector'
 import LabeledInput from '@/shared/components/labeled-input'
+import StatusSelector from '@/shared/components/status-selector'
 import TextEditor from '@/shared/components/text-editor'
 import { Post } from '@/shared/models/post'
 import { PostStatuses } from '@/shared/models/post-status'
 import { savePost, SavePost } from '@/shared/services/posts.service'
+import { isConflictError } from '@/shared/utils/errors'
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -46,6 +48,7 @@ export default function PostForm({ post }: { post?: Post }) {
     watch,
     setValue,
     formState: { errors },
+    setError,
   } = useForm<SavePost>({
     defaultValues: post && {
       title: post.title,
@@ -71,12 +74,19 @@ export default function PostForm({ post }: { post?: Post }) {
 
         router.refresh()
       } catch (e) {
+        if (isConflictError(e)) {
+          setError('title', {
+            message: 'Um artigo com este título já existe',
+          })
+          return
+        }
+
         toast.error('Ocorreu um erro ao salvar este post')
       } finally {
         setLoading(false)
       }
     },
-    [post, router],
+    [post, router, setError],
   )
 
   return (
@@ -84,84 +94,105 @@ export default function PostForm({ post }: { post?: Post }) {
       className="flex flex-col gap-5 items-start"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <input
-        type="hidden"
-        {...register('status')}
-        value={post?.status || 'draft'}
-      />
+      <div className="flex flex-col gap-5 w-full lg:grid lg:grid-cols-[1fr_.5fr] items-start">
+        <div className="p-5 rounded-2xl bg-surface-card border border-surface-border w-full flex flex-col gap-5">
+          <input
+            type="hidden"
+            {...register('status')}
+            value={post?.status || 'draft'}
+          />
 
-      <div className="flex flex-col gap-1 w-full">
-        <label htmlFor="coverUrl" className="text-sm font-bold">
-          Capa
-        </label>
+          <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="coverUrl" className="text-sm font-bold">
+              Capa
+            </label>
 
-        <AvatarInput
-          onChange={function (imageUrl?: string | undefined): void {
-            setValue('coverUrl', imageUrl)
-          }}
-          value={watch('coverUrl')}
-        />
+            <AvatarInput
+              onChange={function (imageUrl?: string | undefined): void {
+                setValue('coverUrl', imageUrl)
+              }}
+              value={watch('coverUrl')}
+            />
+          </div>
+
+          <LabeledInput label="Título">
+            <InputText
+              {...register('title')}
+              className={clsx({ 'p-invalid': errors.title })}
+              autoFocus
+            />
+
+            {errors.title && (
+              <span className="text-[#ff7b7b] font-normal">
+                {errors.title.message}
+              </span>
+            )}
+          </LabeledInput>
+
+          <div className="flex flex-col gap-1 w-full">
+            <label htmlFor="editor" className="text-sm font-bold">
+              Conteúdo
+            </label>
+
+            <TextEditor
+              value={watch('content')}
+              id="editor"
+              onChange={(value) => setValue('content', value)}
+              invalid={!!errors.content}
+            />
+
+            {errors.content && (
+              <span className="text-[#ff7b7b] font-normal">
+                {errors.content.message}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="p-5 rounded-2xl bg-surface-card border border-surface-border w-full flex flex-col gap-5">
+          <LabeledInput label="Resumo">
+            <InputTextarea
+              {...register('description')}
+              className={clsx('min-h-[150px]', {
+                'p-invalid': errors.description,
+              })}
+            />
+
+            {errors.description && (
+              <span className="text-[#ff7b7b] font-normal">
+                {errors.description.message}
+              </span>
+            )}
+          </LabeledInput>
+
+          <LabeledInput label="Categoria">
+            <CategoriesSelector
+              value={watch('categoryId')}
+              onChange={(event) => setValue('categoryId', event.value)}
+              className={clsx({ 'p-invalid': errors.categoryId })}
+            />
+
+            {errors.categoryId && (
+              <span className="text-[#ff7b7b] font-normal">
+                {errors.categoryId.message}
+              </span>
+            )}
+          </LabeledInput>
+
+          <LabeledInput label="Status">
+            <StatusSelector
+              value={watch('status', 'draft')}
+              onChange={(event) => setValue('status', event.value)}
+              className={clsx({ 'p-invalid': errors.status })}
+            />
+
+            {errors.status && (
+              <span className="text-[#ff7b7b] font-normal">
+                {errors.status.message}
+              </span>
+            )}
+          </LabeledInput>
+        </div>
       </div>
-
-      <LabeledInput label="Título">
-        <InputText
-          {...register('title')}
-          className={clsx({ 'p-invalid': errors.title })}
-          autoFocus
-        />
-
-        {errors.title && (
-          <span className="text-[#ff7b7b] font-normal">
-            {errors.title.message}
-          </span>
-        )}
-      </LabeledInput>
-
-      <div className="flex flex-col gap-1 w-full">
-        <label htmlFor="editor" className="text-sm font-bold">
-          Conteúdo
-        </label>
-
-        <TextEditor
-          value={watch('content')}
-          id="editor"
-          onChange={(value) => setValue('content', value)}
-          invalid={!!errors.content}
-        />
-
-        {errors.content && (
-          <span className="text-[#ff7b7b] font-normal">
-            {errors.content.message}
-          </span>
-        )}
-      </div>
-
-      <LabeledInput label="Descrição">
-        <InputTextarea
-          {...register('description')}
-          className={clsx('min-h-[150px]', { 'p-invalid': errors.description })}
-        />
-
-        {errors.description && (
-          <span className="text-[#ff7b7b] font-normal">
-            {errors.description.message}
-          </span>
-        )}
-      </LabeledInput>
-
-      <LabeledInput label="Categoria">
-        <CategoriesSelector
-          value={watch('categoryId')}
-          onChange={(event) => setValue('categoryId', event.value)}
-          className={clsx({ 'p-invalid': errors.categoryId })}
-        />
-
-        {errors.categoryId && (
-          <span className="text-[#ff7b7b] font-normal">
-            {errors.categoryId.message}
-          </span>
-        )}
-      </LabeledInput>
 
       <div className="flex items-center gap-2">
         <Button
