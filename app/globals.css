@@ -28,7 +28,8 @@ body {
 }
 
 body {
-    background: var(--surface-ground);
+    /*background: var(--surface-ground);*/
+    background: linear-gradient(0deg, var(--surface-a), var(--surface-ground));
     color: var(--text-color);
 }
 

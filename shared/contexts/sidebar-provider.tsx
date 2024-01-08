@@ -1,5 +1,6 @@
 'use client'
 
+import Sidebar from '@/shared/components/sidebar'
 import {
   createContext,
   Dispatch,
@@ -9,7 +10,6 @@ import {
   useMemo,
   useState,
 } from 'react'
-import Sidebar from '@/shared/components/sidebar'
 
 interface SidebarContextProps {
   open: boolean
@@ -25,10 +25,10 @@ export default function SidebarProvider({ children }: PropsWithChildren) {
 
   return (
     <SidebarContext.Provider value={value}>
-      <div className="lg:grid lg:grid-cols-[auto_1fr] h-screen max-h-screen">
+      <div className="lg:grid lg:grid-cols-[auto_1fr] h-full min-h-full">
         <Sidebar />
 
-        <div className="overflow-auto pb-10 lg:px-10">{children}</div>
+        <div className="overflow-auto pb-10 lg:px-10 h-full">{children}</div>
       </div>
     </SidebarContext.Provider>
   )

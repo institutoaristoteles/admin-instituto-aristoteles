@@ -95,7 +95,7 @@ export default function PostForm({ post }: { post?: Post }) {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex flex-col gap-5 w-full lg:grid lg:grid-cols-[1fr_.5fr] items-start">
-        <div className="p-5 rounded-2xl bg-surface-card border border-surface-border w-full flex flex-col gap-5">
+        <div className="p-5 rounded-2xl bg-surface-card bg-opacity-75 backdrop-blur-2xl border border-surface-border w-full flex flex-col gap-5">
           <input
             type="hidden"
             {...register('status')}

@@ -27,6 +27,9 @@ const config: Config = {
       fontFamily: {
         sans: 'var(--font-inter)',
       },
+      backgroundImage: {
+        gradient: 'linear-gradient(90deg, var(--surface-d), transparent)',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography')],
