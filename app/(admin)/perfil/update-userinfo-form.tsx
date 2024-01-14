@@ -62,7 +62,7 @@ export default function UpdateUserinfoForm() {
 
   return (
     <form
-      className="flex flex-col gap-5 p-5 rounded-2xl bg-surface-card border border-surface-border"
+      className="flex flex-col gap-5 card"
       onSubmit={handleSubmit(saveUserInfo)}
     >
       <h2 className="text-primary border-b border-b-surface-border pb-2 flex gap-2 items-center font-bold">
