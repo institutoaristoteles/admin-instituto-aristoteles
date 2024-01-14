@@ -88,6 +88,7 @@ export function LinkButton({ editor }: { editor: Editor }) {
   const setLink = useCallback(
     (event: FormEvent) => {
       event.preventDefault()
+      event.stopPropagation()
 
       if (!url) editor.chain().focus().unsetLink().run()
 
@@ -128,7 +129,7 @@ export function LinkButton({ editor }: { editor: Editor }) {
           </LabeledInput>
 
           <div className="flex items-center justify-start">
-            <Button label="Confirmar" />
+            <Button label="Confirmar" type="submit" />
           </div>
         </form>
       </OverlayPanel>
@@ -276,7 +277,7 @@ export default function TextEditor({
     editorProps: {
       attributes: {
         id,
-        class: 'focus-visible:outline-none h-[400px] overflow-auto',
+        class: 'focus-visible:outline-none h-[400px] overflow-auto scrollable',
       },
     },
     content: value,
