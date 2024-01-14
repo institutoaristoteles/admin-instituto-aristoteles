@@ -126,3 +126,17 @@ body, .p-component {
 .p-panel .p-panel-content {
     @apply p-3 bg-surface-b;
 }
+
+.scrollable::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background-color: var(--surface-a);
+    border-radius: 10px;
+    border: 3px solid transparent;
+}

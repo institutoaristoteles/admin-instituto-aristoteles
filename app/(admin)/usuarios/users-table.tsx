@@ -186,6 +186,7 @@ export default function UsersTable() {
         <Column
           header="Avatar"
           bodyClassName="font-bold text-sm whitespace-nowrap"
+          headerStyle={{ width: '5rem' }}
           body={(user: UserProfile) => (
             <Avatar image={user.avatar} size="normal" shape="circle" />
           )}
