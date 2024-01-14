@@ -19,6 +19,10 @@
         background-size: .6rem .6rem;
         background-position: 0 0, 0.65rem 0.65rem;
     }
+
+    .card {
+        @apply p-5 rounded-2xl bg-surface-card border border-surface-border shadow-lg;
+    }
 }
 
 html,
@@ -29,7 +33,7 @@ body {
 
 body {
     /*background: var(--surface-ground);*/
-    background: linear-gradient(0deg, var(--surface-a), var(--surface-ground));
+    background: linear-gradient(0deg, #0c1d35, var(--surface-ground));
     color: var(--text-color);
 }
 
