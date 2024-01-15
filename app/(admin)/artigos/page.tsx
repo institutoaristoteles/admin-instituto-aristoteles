@@ -11,13 +11,19 @@ import Link from 'next/link';
 import { PrimeIcons } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
+import { DataTable, DataTableStateEvent } from 'primereact/datatable';
 import { useEffect, useState } from 'react';
 
 
 
 const PostsPage: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [first,setFirst] = useState(0)
+  const [page,setPage] = useState(0)
+  const [loading,setLoading] = useState(false)
+  const pageSize = 6
+  const [selectedPosts, setSelectedPosts] = useState<Post[]>([])
+
 
   const breadcrumbs: BreadcrumbItem[] = [{ label: 'Artigos' }]
 
@@ -25,15 +31,26 @@ const PostsPage: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const data = await getPosts();
+        setLoading(true)
+        console.log(page)
+        const data = await getPosts({page: page+1,pageSize});
+        console.log(data)
         setPosts(data.results);
       } catch (error) {
         console.error('Erro ao obter os posts:', error);
+      } finally {
+        setLoading(false)
       }
     };
 
     fetchPosts();
-  }, []);
+  }, [page]);
+
+  const onPageChange = (event:DataTableStateEvent) => {
+    console.log(event)
+    setPage(event.page || 0)
+    setFirst(event.first)
+  }
 
   // Estrutura html que exibe os posts
   return (
@@ -42,16 +59,20 @@ const PostsPage: React.FC = () => {
         <PageHeader title="Artigos" breadcrumbs={breadcrumbs} />
         <DataTable
           value={posts}
-          // selection={selectedCategories}
-          //selectionMode="multiple"
-          //onSelectionChange={(e) => setSelectedCategories(e.value)}
-          //loading={loading} usar posteriormente
+          selection={selectedPosts}
+          selectionMode="multiple"
+          onSelectionChange={(e) => setSelectedPosts(e.value)}
           dataKey="id"
           paginator
-          rows={10}
+          lazy
+          totalRecords={5000}
+          onPage={onPageChange}
+          first={first}
+          rows={pageSize}
           emptyMessage="Nenhuma categoria encontrada"
+          loading= {loading}
         >
-          {/* <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} /> */}
+          <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
           <Column
             header="Título"
             headerStyle={{ width: '100%' }}
@@ -92,7 +113,7 @@ const PostsPage: React.FC = () => {
           <Column
             body={(post: Post) => (
               <div className="flex items-center gap-2">
-                <Link href={`/categorias/${post.id}`}>
+                <Link href={`/artigos/${post.id}`}>
                   <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
                 </Link>
 
