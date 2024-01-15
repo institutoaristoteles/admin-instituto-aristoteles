@@ -14,5 +14,5 @@ export interface Post {
   updatedBy?: UserProfile
   category?: Category
   createdAt: Date
-  updatedAt?: Date
+  updatedAt: Date
 }
