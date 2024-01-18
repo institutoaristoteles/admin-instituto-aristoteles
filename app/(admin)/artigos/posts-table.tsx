@@ -18,14 +18,19 @@ export default function PostsTable() {
   const [page, setPage] = useState(0)
   const [loading, setLoading] = useState(false)
   const [selectedPosts, setSelectedPosts] = useState<Post[]>([])
+  const [totalSize, setTotalSize] = useState(0)
   const pageSize = 6
 
   useEffect(() => {
     ;(async () => {
       try {
         setLoading(true)
-        const { results } = await getPosts({ page: page + 1, pageSize })
+        const { results, totalSize } = await getPosts({
+          page: page + 1,
+          pageSize,
+        })
         setPosts(results)
+        setTotalSize(totalSize)
       } catch (error) {
         console.error('Erro ao obter os posts:', error)
       } finally {
@@ -57,7 +62,7 @@ export default function PostsTable() {
         dataKey="id"
         paginator
         lazy
-        totalRecords={5000}
+        totalRecords={totalSize}
         onPage={onPageChange}
         first={first}
         rows={pageSize}
