@@ -2,6 +2,7 @@ import { WithPagination } from '@/shared/models/pagination'
 import { Post } from '@/shared/models/post'
 import { PostStatus } from '@/shared/models/post-status'
 import { api } from '@/shared/services/api'
+import React from 'react'
 
 export type GetPostsFilters = Partial<{
   pageSize: number
@@ -43,3 +44,9 @@ export async function getPostById(postId: string) {
 export async function deletePost(postId: string) {
   await api.delete(`/posts/${postId}`)
 }
+
+export const deletePosts = React.cache(async (...ids: string[]) => {
+  await api.delete('/posts/bulk-delete', {
+    data: { ids },
+  })
+})

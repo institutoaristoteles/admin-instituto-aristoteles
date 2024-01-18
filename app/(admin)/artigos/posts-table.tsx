@@ -3,10 +3,15 @@
 import PostStatusTable from '@/shared/components/post-status-table'
 import UserAvatarTable from '@/shared/components/user-avatar-table'
 import { Post } from '@/shared/models/post'
-import { deletePost, getPosts } from '@/shared/services/posts.service'
+import {
+  deletePost,
+  deletePosts,
+  getPosts,
+} from '@/shared/services/posts.service'
 import { dateFormatter } from '@/shared/utils/date'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
+import { Badge } from 'primereact/badge'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
@@ -80,6 +85,46 @@ export default function PostsTable() {
     [removePost],
   )
 
+  const removeAllSelected = useCallback(async () => {
+    try {
+      setLoading(true)
+      const ids = selectedPosts.map((post) => post.id)
+      if (ids.length <= 0) return
+
+      await deletePosts(...ids)
+      await loadPosts()
+      toast.success(`${selectedPosts.length} artigos(s) removidas com sucesso`)
+      setSelectedPosts([])
+    } catch (e) {
+      toast.error('Ocorreu um erro ao remover os artigos')
+    } finally {
+      setLoading(false)
+    }
+  }, [loadPosts, selectedPosts])
+
+  const confirmCategoriesRemoval = useCallback(() => {
+    confirmDialog({
+      message: (
+        <>
+          Tem certeza que deseja excluir os seguintes artigos?
+          <ul className="pl-5 pt-5">
+            {selectedPosts.map((post) => (
+              <li key={post.id} className="list-disc">
+                {post.title}
+              </li>
+            ))}
+          </ul>
+        </>
+      ),
+      header: 'Excluir artigos',
+      icon: PrimeIcons.TRASH,
+      acceptClassName: 'p-button-danger',
+      rejectLabel: 'Não, cancelar',
+      acceptLabel: 'Sim, excluir',
+      accept: removeAllSelected,
+    })
+  }, [removeAllSelected, selectedPosts])
+
   return (
     <React.Fragment>
       <header className="flex items-center justify-between gap-5 pb-5">
@@ -87,6 +132,23 @@ export default function PostsTable() {
           <Link href="/artigos/novo">
             <Button label="Adicionar" icon={PrimeIcons.PLUS} size="small" />
           </Link>
+
+          {selectedPosts.length > 0 && (
+            <Button
+              label="Excluir"
+              icon={PrimeIcons.TRASH}
+              size="small"
+              severity="danger"
+              onClick={confirmCategoriesRemoval}
+              loading={loading}
+              outlined
+            >
+              <Badge
+                value={selectedPosts.length.toString()}
+                severity="danger"
+              />
+            </Button>
+          )}
         </div>
       </header>
 
