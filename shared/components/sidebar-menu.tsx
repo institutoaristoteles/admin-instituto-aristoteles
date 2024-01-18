@@ -9,11 +9,6 @@ function SidebarMenu() {
   return (
     <nav className="w-full flex flex-col gap-1 px-3">
       <SidebarMenuItem
-        label="Início"
-        href="/"
-        icon={<i className={PrimeIcons.HOME} />}
-      />
-      <SidebarMenuItem
         label="Artigos"
         href="/artigos"
         icon={<i className={PrimeIcons.BOOK} />}

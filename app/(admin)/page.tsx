@@ -1,17 +1,5 @@
-import PageHeader from '@/shared/components/page-header'
-import { Metadata } from 'next'
-import React from 'react'
-
-export const metadata: Metadata = {
-  title: 'Dashboard',
-}
+import { redirect } from 'next/navigation'
 
 export default async function Home() {
-  return (
-    <main>
-      <div className="container">
-        <PageHeader title="Seja bem vindo(a)" />
-      </div>
-    </main>
-  )
+  return redirect('/artigos')
 }
