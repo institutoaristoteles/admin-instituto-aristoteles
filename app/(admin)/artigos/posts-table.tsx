@@ -3,14 +3,16 @@
 import PostStatusTable from '@/shared/components/post-status-table'
 import UserAvatarTable from '@/shared/components/user-avatar-table'
 import { Post } from '@/shared/models/post'
-import { getPosts } from '@/shared/services/posts.service'
+import { deletePost, getPosts } from '@/shared/services/posts.service'
 import { dateFormatter } from '@/shared/utils/date'
 import Link from 'next/link'
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
 import { DataTable, DataTableStateEvent } from 'primereact/datatable'
 import React, { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 export default function PostsTable() {
   const [posts, setPosts] = useState<Post[]>([])
@@ -21,28 +23,62 @@ export default function PostsTable() {
   const [totalSize, setTotalSize] = useState(0)
   const pageSize = 6
 
-  useEffect(() => {
-    ;(async () => {
-      try {
-        setLoading(true)
-        const { results, totalSize } = await getPosts({
-          page: page + 1,
-          pageSize,
-        })
-        setPosts(results)
-        setTotalSize(totalSize)
-      } catch (error) {
-        console.error('Erro ao obter os posts:', error)
-      } finally {
-        setLoading(false)
-      }
-    })()
+  const loadPosts = useCallback(async () => {
+    try {
+      setLoading(true)
+      const { results, totalSize } = await getPosts({
+        page: page + 1,
+        pageSize,
+      })
+      setPosts(results)
+      setTotalSize(totalSize)
+    } catch (error) {
+      console.error('Erro ao obter os posts:', error)
+    } finally {
+      setLoading(false)
+    }
   }, [page])
+
+  useEffect(() => {
+    ;(async () => await loadPosts())()
+  }, [loadPosts, page])
 
   const onPageChange = useCallback((event: DataTableStateEvent) => {
     setPage(event.page || 0)
     setFirst(event.first)
   }, [])
+
+  const removePost = useCallback(
+    async (id: string) => {
+      try {
+        setLoading(true)
+        await deletePost(id)
+        await loadPosts()
+        setSelectedPosts([])
+        toast.success('Artigo removido com sucesso')
+      } catch (e) {
+        toast.error('Ocorreu um erro ao remover este artigo')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [loadPosts],
+  )
+
+  const confirmPostRemoval = useCallback(
+    (post: Post) => {
+      confirmDialog({
+        message: `Tem certeza que deseja excluir o artigo ${post.title}?`,
+        header: 'Excluir artigo',
+        icon: PrimeIcons.TRASH,
+        acceptClassName: 'p-button-danger',
+        rejectLabel: 'Não, cancelar',
+        acceptLabel: 'Sim, excluir',
+        accept: async () => await removePost(post.id),
+      })
+    },
+    [removePost],
+  )
 
   return (
     <React.Fragment>
@@ -115,12 +151,14 @@ export default function PostsTable() {
                 text
                 rounded
                 severity="danger"
-                // onClick={() => confirmCategoryRemoval(category)}
+                onClick={() => confirmPostRemoval(post)}
               />
             </div>
           )}
         />
       </DataTable>
+
+      <ConfirmDialog />
     </React.Fragment>
   )
 }
