@@ -33,6 +33,7 @@ export default function LoginForm() {
       router.push('/')
       router.refresh()
     } catch (e) {
+      console.error(e)
       const errorMessage =
         isAxiosError(e) && e.response?.status === 401
           ? 'Usuário ou senha inválidos'
