@@ -96,6 +96,7 @@ export default function PostsTable() {
       toast.success(`${selectedPosts.length} artigos(s) removidas com sucesso`)
       setSelectedPosts([])
     } catch (e) {
+      console.log(e)
       toast.error('Ocorreu um erro ao remover os artigos')
     } finally {
       setLoading(false)

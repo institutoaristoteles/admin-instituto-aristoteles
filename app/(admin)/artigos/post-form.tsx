@@ -33,9 +33,11 @@ const schemaValidator = z.object({
   description: z
     .string({ required_error: 'Campo obrigatório' })
     .min(1, 'Campo obrigatório'),
-  categoryId: z.string({
-    required_error: 'É necessário selecionar uma categoria',
-  }),
+  categoryId: z
+    .string({
+      required_error: 'É necessário selecionar uma categoria',
+    })
+    .optional(),
   status: z.enum(PostStatuses),
 })
 
@@ -50,14 +52,16 @@ export default function PostForm({ post }: { post?: Post }) {
     formState: { errors },
     setError,
   } = useForm<SavePost>({
-    defaultValues: post && {
-      title: post.title,
-      content: post.content,
-      description: post.description,
-      categoryId: post.category?.id,
-      coverUrl: post.coverUrl,
-      status: post.status,
-    },
+    defaultValues: post
+      ? {
+          title: post.title,
+          content: post.content,
+          description: post.description,
+          categoryId: post.category?.id,
+          coverUrl: post.coverUrl,
+          status: post.status,
+        }
+      : { status: 'draft' },
     resolver: zodResolver(schemaValidator),
   })
 
