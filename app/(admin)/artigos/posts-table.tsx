@@ -164,7 +164,7 @@ export default function PostsTable() {
         onPage={onPageChange}
         first={first}
         rows={pageSize}
-        emptyMessage="Nenhuma categoria encontrada"
+        emptyMessage="Nenhum artigo encontrado"
         loading={loading}
       >
         <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
