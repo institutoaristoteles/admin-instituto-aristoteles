@@ -66,8 +66,6 @@ export default function PostForm({ post }: { post?: Post }) {
     resolver: zodResolver(schemaValidator),
   })
 
-  const title = watch('title')
-
   const onSubmit = useCallback(
     async (values: SavePost) => {
       try {
