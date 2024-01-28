@@ -28,12 +28,13 @@ export async function getPosts(filters: GetPostsFilters = defaultFilters) {
   return data
 }
 
-export async function savePost(data: SavePost, id?: string) {
+export async function savePost(data: SavePost, id?: string): Promise<Post> {
   if (id) {
     return await api.put(`/posts/${id}`, data)
   }
 
-  await api.post('/posts', data)
+  const response = await api.post<Post>('/posts', data)
+  return response.data
 }
 
 export async function getPostById(postId: string) {

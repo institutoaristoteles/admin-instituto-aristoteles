@@ -17,9 +17,10 @@ import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { InputTextarea } from 'primereact/inputtextarea'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import slugify from 'slugify'
 import { z } from 'zod'
 
 const schemaValidator = z.object({
@@ -29,7 +30,7 @@ const schemaValidator = z.object({
   content: z
     .string({ required_error: 'Campo obrigatório' })
     .min(1, 'Campo obrigatório'),
-  coverUrl: z.string().url().optional(),
+  coverUrl: z.string().url().optional().nullable(),
   description: z
     .string({ required_error: 'Campo obrigatório' })
     .min(1, 'Campo obrigatório'),
@@ -65,15 +66,17 @@ export default function PostForm({ post }: { post?: Post }) {
     resolver: zodResolver(schemaValidator),
   })
 
+  const title = watch('title')
+
   const onSubmit = useCallback(
     async (values: SavePost) => {
       try {
         setLoading(true)
-        await savePost(values, post?.id)
+        const createdPost = await savePost(values, post?.id)
         toast.success('Post salvo')
 
         if (!post) {
-          return router.push('/artigos')
+          return router.push(`/artigos/${createdPost.id}`)
         }
 
         router.refresh()
@@ -92,6 +95,13 @@ export default function PostForm({ post }: { post?: Post }) {
     },
     [post, router, setError],
   )
+
+  const previewUrl = useMemo(() => {
+    if (!post) return undefined
+
+    const postSlug = slugify(post.slug, { lower: true })
+    return `${process.env.NEXT_PUBLIC_PREVIEW_BASE_URL}/${postSlug}`
+  }, [post])
 
   return (
     <form
@@ -189,6 +199,19 @@ export default function PostForm({ post }: { post?: Post }) {
               </span>
             )}
           </LabeledInput>
+
+          {previewUrl && (
+            <div className="flex flex-col">
+              <label className="font-bold text-sm">Preview:</label>
+              <Link
+                href={previewUrl}
+                className="text-base text-primary"
+                target="_blank"
+              >
+                {previewUrl}
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
