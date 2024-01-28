@@ -200,7 +200,7 @@ export default function PostForm({ post }: { post?: Post }) {
 
           {previewUrl && (
             <div className="flex flex-col">
-              <label className="font-bold text-sm">Preview:</label>
+              <label className="font-bold text-sm">URL:</label>
               <Link
                 href={previewUrl}
                 className="text-base text-primary"
