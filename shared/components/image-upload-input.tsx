@@ -80,7 +80,7 @@ export default function ImageUploadInput({
   }, [handleClear, handleClick, loading, selected])
 
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-5 bg-surface-b bg-dotted border border-surface-border rounded p-5">
       <input
         type="file"
         ref={fileInput}
@@ -94,7 +94,7 @@ export default function ImageUploadInput({
         <img
           src={selected}
           alt=""
-          className="rounded-2xl aspect-square object-cover shadow w-[120px] h-[120px]"
+          className="rounded-2xl object-cover shadow h-[120px]"
         />
       )}
 
