@@ -15,7 +15,8 @@ export default function ImageUploadInput({
 }: ImageUploadInputProps) {
   const fileInput = useRef<HTMLInputElement>(null)
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
     fileInput.current?.click()
   }, [])
 
@@ -42,45 +43,57 @@ export default function ImageUploadInput({
   const buttons = useMemo(() => {
     if (!selected) {
       return (
-        <Button
-          label="Selecionar"
-          type="button"
-          outlined
-          size="small"
-          icon={PrimeIcons.PENCIL}
-          onClick={handleClick}
-          loading={loading}
-        />
+        <React.Fragment>
+          <p className="text-sm font-normal">
+            Clique{' '}
+            <button
+              onClick={handleClick}
+              className="inline text-primary underline"
+              type="button"
+            >
+              aqui
+            </button>{' '}
+            para selecionar uma imagem.
+          </p>
+        </React.Fragment>
       )
     }
 
     return (
-      <React.Fragment>
+      <div className="flex gap-2">
         <Button
           type="button"
-          outlined
-          rounded
+          text
           size="small"
+          label="Trocar"
           onClick={handleClick}
           icon={PrimeIcons.PENCIL}
           loading={loading}
+          pt={{
+            label: { className: 'font-normal text-sm' },
+            root: { className: 'p-2' },
+          }}
         />
         <Button
-          outlined
-          rounded
+          text
           icon={PrimeIcons.TRASH}
           severity="danger"
+          label="Remover"
           type="button"
           size="small"
           onClick={handleClear}
           loading={loading}
+          pt={{
+            label: { className: 'font-normal text-sm' },
+            root: { className: 'p-2' },
+          }}
         />
-      </React.Fragment>
+      </div>
     )
   }, [handleClear, handleClick, loading, selected])
 
   return (
-    <div className="flex items-center gap-5 bg-surface-b bg-dotted border border-surface-border rounded p-5">
+    <div className="flex flex-col justify-center items-center gap-5 bg-surface-b bg-dotted border border-surface-border rounded p-5">
       <input
         type="file"
         ref={fileInput}
@@ -94,11 +107,13 @@ export default function ImageUploadInput({
         <img
           src={selected}
           alt=""
-          className="rounded-2xl object-cover shadow h-[120px]"
+          className="rounded-2xl object-cover shadow max-h-[120px]"
         />
       )}
 
-      <div className="flex flex-col gap-2">{buttons}</div>
+      <div className="flex flex-col gap-2 w-full justify-center items-center">
+        {buttons}
+      </div>
     </div>
   )
 }
