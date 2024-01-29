@@ -126,6 +126,10 @@ export default function PostsTable() {
     })
   }, [removeAllSelected, selectedPosts])
 
+  const getPublicUrl = useCallback((slug: string) => {
+    return `${process.env.NEXT_PUBLIC_PREVIEW_BASE_URL}/${slug}`
+  }, [])
+
   return (
     <React.Fragment>
       <header className="flex items-center justify-between gap-5 pb-5">
@@ -171,7 +175,6 @@ export default function PostsTable() {
         <Column selectionMode="multiple" headerStyle={{ width: '3rem' }} />
         <Column
           header="Título"
-          headerStyle={{ width: '100%' }}
           body={(category: Post) => (
             <span className="font-bold text-sm whitespace-nowrap">
               {category.title}
@@ -207,6 +210,15 @@ export default function PostsTable() {
             <div className="flex items-center gap-2">
               <Link href={`/artigos/${post.id}`}>
                 <Button icon={PrimeIcons.PENCIL} text rounded severity="info" />
+              </Link>
+
+              <Link href={getPublicUrl(post.slug)} target="_blank">
+                <Button
+                  icon={PrimeIcons.EXTERNAL_LINK}
+                  text
+                  rounded
+                  severity="info"
+                />
               </Link>
 
               <Button

@@ -1,5 +1,6 @@
 import { PrimeIcons } from 'primereact/api'
 import { Button } from 'primereact/button'
+import { SpinnerIcon } from 'primereact/icons/spinner'
 import React, { useCallback, useMemo, useRef } from 'react'
 
 interface ImageUploadInputProps {
@@ -41,6 +42,10 @@ export default function ImageUploadInput({
   )
 
   const buttons = useMemo(() => {
+    if (loading) {
+      return <SpinnerIcon className="pi-spin" />
+    }
+
     if (!selected) {
       return (
         <React.Fragment>
